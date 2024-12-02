@@ -1,5 +1,5 @@
 package com.example.shop.domain.order;
 
-public enum OrderState {
+public enum OrderStatus {
     PAID, SHIPPING, DELIVERED, CANCELLED, REMOVED
 }
