@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(name = "order_details")
 public class OrderDetail  extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

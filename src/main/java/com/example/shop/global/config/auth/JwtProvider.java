@@ -1,7 +1,6 @@
 package com.example.shop.global.config.auth;
 
 import com.example.shop.auth.dto.TokenDto;
-import com.example.shop.domain.user.Users;
 import com.example.shop.global.exception.NoAuthAccessToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -16,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;

@@ -4,7 +4,7 @@ import com.example.shop.auth.RefreshTokenRepository;
 import com.example.shop.auth.dto.*;
 import com.example.shop.domain.user.RefreshToken;
 import com.example.shop.domain.user.Role;
-import com.example.shop.domain.user.Users;
+import com.example.shop.domain.user.User;
 import com.example.shop.domain.user.UserRepository;
 import com.example.shop.global.config.auth.JwtProvider;
 import com.example.shop.global.exception.UserNotFound;
@@ -49,7 +49,7 @@ public class AuthService {
         return authentication;
     }
     private void saveRefreshToken(String tokenValue, String email) {
-        Users user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(UserNotFound::new);
         refreshTokenRepository.save(new RefreshToken(tokenValue, user.getId().toString()));
     }

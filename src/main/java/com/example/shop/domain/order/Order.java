@@ -1,7 +1,7 @@
 package com.example.shop.domain.order;
 
 import com.example.shop.domain.BaseEntity;
-import com.example.shop.domain.user.Users;
+import com.example.shop.domain.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class Order extends BaseEntity {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private Users user;
+    private User user;
 
     @Column(name="total_price")
     @NotNull
@@ -41,10 +41,10 @@ public class Order extends BaseEntity {
     @Column(name = "shipping_message")
     private String shippingMessage;
 
-    @Column(name = "order_state")
+    @Column(name = "order_status")
     @NotNull
     @Enumerated(EnumType.STRING)
-    private OrderState orderState;
+    private OrderStatus orderStatus;
 
 
 }

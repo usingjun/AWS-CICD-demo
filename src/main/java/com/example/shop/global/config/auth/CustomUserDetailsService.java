@@ -1,11 +1,10 @@
 package com.example.shop.global.config.auth;
 
 import com.example.shop.domain.user.UserRepository;
-import com.example.shop.domain.user.Users;
+import com.example.shop.domain.user.User;
 import com.example.shop.global.exception.UserNotFound;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,8 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(UserNotFound::new));
     }
 
-    public UserDetails createUserDetails(Users user) {
-        UserDetails userDetails =  User.builder()
+    public UserDetails createUserDetails(User user) {
+        UserDetails userDetails =  org.springframework.security.core.userdetails.User.builder()
                 .username(user.getEmail())
                 .password(user.getPassword())
                 .authorities(new SimpleGrantedAuthority(user.getUserRole().toString()))
