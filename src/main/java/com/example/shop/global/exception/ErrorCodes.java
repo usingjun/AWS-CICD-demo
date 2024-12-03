@@ -14,6 +14,9 @@ public enum ErrorCodes {
     INVALID_CART_QUANTITY(HttpStatus.BAD_REQUEST, "수량은 1개 이상이어야 합니다."),
     PRODUCT_NOT_FOUND(HttpStatus.BAD_REQUEST, "등록된 상품이 아닙니다.");
 
+    // Email 관련 에러
+    EMAIL_FORM_CREATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 템플릿 생성 중 오류가 발생했습니다."),
+    EMAIL_SEND_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "Email 서버에 문제가 발생하였습니다.");
 
     private String message;
     private HttpStatus status;

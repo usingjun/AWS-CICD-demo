@@ -1,6 +1,6 @@
 package com.example.shop.global.config.auth;
 
-import com.example.shop.auth.RefreshTokenRepository;
+import com.example.shop.auth.repository.RefreshTokenRepository;
 import com.example.shop.global.exception.NoAuthorizationHeader;
 import com.example.shop.global.exception.NoBearer;
 import io.jsonwebtoken.ExpiredJwtException;

@@ -1,7 +1,6 @@
 package com.example.shop.global.config;
 
-import com.example.shop.auth.RefreshTokenRepository;
-import com.example.shop.domain.user.Role;
+import com.example.shop.auth.repository.RefreshTokenRepository;
 import com.example.shop.global.config.auth.JwtAuthenticationEntryPoint;
 import com.example.shop.global.config.auth.JwtAuthenticationFilter;
 import com.example.shop.global.config.auth.JwtProvider;
@@ -34,7 +33,8 @@ public class SecurityConfig  {
             "/api/auth/sign-in",
             "/error",
             "/api/auth/reissue",
-            "/api/auth/send-mail"
+            "/api/auth/email/auth-code",
+            "/api/auth/auth-code/verification"
     };
 
 

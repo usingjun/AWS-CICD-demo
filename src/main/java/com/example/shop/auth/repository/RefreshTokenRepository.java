@@ -1,4 +1,4 @@
-package com.example.shop.auth;
+package com.example.shop.auth.repository;
 
 import com.example.shop.domain.user.RefreshToken;
 import org.springframework.data.redis.core.RedisTemplate;
