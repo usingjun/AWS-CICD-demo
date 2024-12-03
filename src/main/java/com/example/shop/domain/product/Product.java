@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -20,9 +22,9 @@ public class Product  extends BaseEntity {
     @Column(name = "product_name")
     private String productName;
     @NotNull
-    private Long quantity;
+    private int quantity;
     @NotNull
-    private Long price;
+    private BigDecimal price;
     private String image;
     private String description;
 }
