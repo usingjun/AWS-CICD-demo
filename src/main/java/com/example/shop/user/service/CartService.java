@@ -67,9 +67,20 @@ public class CartService {
 
         // 삭제할 상품이 장바구니에 있는지 확인
         CartDetail cartDetail = cartDetailRepository.findByUserIdAndProductId(user.getId(), productId)
-                                                    .orElseThrow(CartProductNotFoundException::new);
+                .orElseThrow(CartProductNotFoundException::new);
 
         cartDetailRepository.deleteByUserIdAndProductId(user.getId(), productId);
+    }
+
+    @Transactional
+    public void updateCartQuantity(Long productId, int quantity) {
+        User user = getCurrentUser();
+
+        // 수정할 상품이 장바구니에 있는지 확인
+        CartDetail cartDetail = cartDetailRepository.findByUserIdAndProductId(user.getId(), productId)
+                .orElseThrow(CartProductNotFoundException::new);
+
+        cartDetail.changeQuantity(quantity);
     }
 
     private User getCurrentUser() {
@@ -77,4 +88,5 @@ public class CartService {
         return userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
     }
+
 }
