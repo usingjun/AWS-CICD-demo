@@ -3,6 +3,7 @@ package com.example.shop.user.controller;
 import com.example.shop.user.dto.AddCartProductRequest;
 import com.example.shop.user.dto.CartDetailResponse;
 import com.example.shop.user.service.CartService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,7 +26,7 @@ public class CartController {
     @PostMapping("/products")
     public ResponseEntity<Void> addCartProduct(
             @AuthenticationPrincipal UserDetails userDetails
-            , @RequestBody AddCartProductRequest request) {
+            , @RequestBody @Valid AddCartProductRequest request) {
         String userEmail = userDetails.getUsername();
         cartService.addCartProduct(userEmail, request);
         return ResponseEntity.ok().build();

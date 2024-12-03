@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -33,8 +34,19 @@ public class CartService {
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(ProductNotFoundException::new);
 
-        CartDetail cartDetail = new CartDetail(user, product, request.getQuantity());
-        cartDetailRepository.save(cartDetail);
+        // 기존 장바구니에 같은 상품이 있는지 확인
+        Optional<CartDetail> existingCart = cartDetailRepository.findByUserAndProduct(user, product);
+
+        if (existingCart.isPresent()) {
+            // 기존 상품이 있으면 수량 추가
+            CartDetail cartDetail = existingCart.get();
+            cartDetail.changeQuantity(cartDetail.getQuantity() + request.getQuantity());
+        } else {
+            // 새로운 상품이면 새로 추가
+            CartDetail cartDetail = new CartDetail(user, product, request.getQuantity());
+            cartDetailRepository.save(cartDetail);
+        }
+
     }
 
     public List<CartDetailResponse> getCartDetails(String userEmail) {
