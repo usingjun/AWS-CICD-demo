@@ -1,7 +1,7 @@
 package com.example.shop.global.config.auth;
 
 import com.example.shop.auth.dto.TokenDto;
-import com.example.shop.global.exception.NoAuthAccessToken;
+import com.example.shop.global.exception.NoAuthAccessTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -67,7 +67,7 @@ public class JwtProvider {
         // 토큰 복호화
         Claims claims = parseClaims(token);
         if (claims.get("auth") == null) {
-            throw new NoAuthAccessToken();
+            throw new NoAuthAccessTokenException();
         }
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get("auth").toString().split(","))

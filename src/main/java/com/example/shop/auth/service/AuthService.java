@@ -9,7 +9,8 @@ import com.example.shop.domain.user.User;
 import com.example.shop.domain.user.UserRepository;
 import com.example.shop.global.EmailSender;
 import com.example.shop.global.config.auth.JwtProvider;
-import com.example.shop.global.exception.UserNotFound;
+import com.example.shop.global.exception.DuplicatedEmailException;
+import com.example.shop.global.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -40,8 +41,9 @@ public class AuthService {
         //saveRefreshToken(tokenDto.getRefreshToken(), signInRequest.getEmail());
         return SignInResponse.of(tokenDto.getAccessToken(),tokenDto.getGrantType());
     }
+    @Transactional
     public SignUpResponse signUp(SignUpRequest signUpRequest, Role role) {
-        // duplicate 검증 추가
+        checkDuplicatedEmail(signUpRequest);
         // 이메일 인증 추가
         userRepository.save(SignUpRequest.toEntity(signUpRequest.getEmail()
                 , passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getName(),role));
@@ -57,8 +59,11 @@ public class AuthService {
     }
     private void saveRefreshToken(String tokenValue, String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(UserNotFound::new);
+                .orElseThrow(UserNotFoundException::new);
         refreshTokenRepository.save(new RefreshToken(tokenValue, user.getId().toString()));
+    }
+    private void checkDuplicatedEmail(SignUpRequest signUpRequest) {
+        if(userRepository.existsByEmail(signUpRequest.getEmail())) throw new DuplicatedEmailException();
     }
 
     public void sendAuthCode(String receivedMail) {

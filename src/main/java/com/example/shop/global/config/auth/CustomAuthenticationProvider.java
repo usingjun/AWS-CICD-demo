@@ -1,6 +1,6 @@
 package com.example.shop.global.config.auth;
 
-import com.example.shop.global.exception.LogInNotMatch;
+import com.example.shop.global.exception.LogInNotMatchException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         if(!passwordEncoder.matches(password,userDetails.getPassword())){
-            throw new LogInNotMatch();
+            throw new LogInNotMatchException();
         }
 
 

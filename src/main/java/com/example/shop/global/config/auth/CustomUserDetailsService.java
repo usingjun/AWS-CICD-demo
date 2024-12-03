@@ -2,7 +2,7 @@ package com.example.shop.global.config.auth;
 
 import com.example.shop.domain.user.UserRepository;
 import com.example.shop.domain.user.User;
-import com.example.shop.global.exception.UserNotFound;
+import com.example.shop.global.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return createUserDetails(userRepository.findByEmail(email)
-                .orElseThrow(UserNotFound::new));
+                .orElseThrow(UserNotFoundException::new));
     }
 
     public UserDetails createUserDetails(User user) {

@@ -1,14 +1,14 @@
 package com.example.shop.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @MappedSuperclass
@@ -16,9 +16,10 @@ import java.time.LocalDate;
 public abstract class BaseEntity {
     @CreatedDate
     @Column(updatable = false, name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(updatable = false, name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
+
 }

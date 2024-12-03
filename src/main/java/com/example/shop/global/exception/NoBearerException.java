@@ -2,8 +2,8 @@ package com.example.shop.global.exception;
 
 import com.example.shop.global.response.BusinessExceptionHandler;
 
-public class NoBearer extends BusinessExceptionHandler {
-    public NoBearer() {
+public class NoBearerException extends BusinessExceptionHandler {
+    public NoBearerException() {
         super(ErrorCodes.NO_BEARER);
     }
 

@@ -1,8 +1,8 @@
 package com.example.shop.global.config.auth;
 
 import com.example.shop.auth.repository.RefreshTokenRepository;
-import com.example.shop.global.exception.NoAuthorizationHeader;
-import com.example.shop.global.exception.NoBearer;
+import com.example.shop.global.exception.NoAuthorizationHeaderException;
+import com.example.shop.global.exception.NoBearerException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
@@ -41,9 +41,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             request.setAttribute(EXCEPTION,MALFORMED);
         } catch (ExpiredJwtException e) {
             request.setAttribute(EXCEPTION, EXPIRED);
-        } catch (NoAuthorizationHeader e) {
+        } catch (NoAuthorizationHeaderException e) {
             request.setAttribute(EXCEPTION, HEADER);
-        } catch (NoBearer e) {
+        } catch (NoBearerException e) {
             request.setAttribute(EXCEPTION,BEARER);
         } finally {
             filterChain.doFilter(request, response);
@@ -54,8 +54,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     //헤더에서 토큰 정보 추출
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if(!StringUtils.hasText(bearerToken)) throw new NoAuthorizationHeader();
-        if(!bearerToken.startsWith("Bearer")) throw new NoBearer();
+        if(!StringUtils.hasText(bearerToken)) throw new NoAuthorizationHeaderException();
+        if(!bearerToken.startsWith("Bearer")) throw new NoBearerException();
         return bearerToken.substring(7);
     }
 }

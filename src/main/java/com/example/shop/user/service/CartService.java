@@ -7,7 +7,7 @@ import com.example.shop.domain.product.ProductRepository;
 import com.example.shop.domain.user.User;
 import com.example.shop.domain.user.UserRepository;
 import com.example.shop.global.exception.ProductNotFoundException;
-import com.example.shop.global.exception.UserNotFound;
+import com.example.shop.global.exception.UserNotFoundException;
 import com.example.shop.user.dto.AddCartProductRequest;
 import com.example.shop.user.dto.CartDetailResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class CartService {
 
     public void addCartProduct(String userEmail, AddCartProductRequest request) {
         User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(UserNotFound::new);
+                .orElseThrow(UserNotFoundException::new);
 
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(ProductNotFoundException::new);
@@ -39,7 +39,7 @@ public class CartService {
 
     public List<CartDetailResponse> getCartDetails(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
-                .orElseThrow(UserNotFound::new);
+                .orElseThrow(UserNotFoundException::new);
 
         List<CartDetail> cartDetails = cartDetailRepository.findByUserIdWithProduct(user.getId());
         return cartDetails.stream()
