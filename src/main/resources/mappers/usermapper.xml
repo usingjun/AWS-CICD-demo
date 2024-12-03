@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.shop.user.mapper.UserMapper">
+
+    <select id="getAllProducts" resultType="productResponse">
+        select id, product_name as productName, price, image
+        from Products
+    </select>
+
+    <select id="getProductDetail" parameterType="Long" resultType="productResponse">
+        select id, product_name as productName, price, description, image
+        from Products
+        where id = #{id}
+    </select>
+
+</mapper>
