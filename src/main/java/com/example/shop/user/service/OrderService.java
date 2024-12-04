@@ -10,11 +10,13 @@ import com.example.shop.domain.product.ProductRepository;
 import com.example.shop.domain.user.User;
 import com.example.shop.domain.user.UserRepository;
 import com.example.shop.global.exception.EmptyCartException;
+import com.example.shop.global.exception.OrderNotFoundException;
 import com.example.shop.global.exception.ProductNotFoundException;
 import com.example.shop.global.exception.UserNotFoundException;
 import com.example.shop.global.util.SecurityUtil;
 import com.example.shop.user.dto.CreateOrderRequest;
-import com.example.shop.user.dto.CreateOrderResponse;
+import com.example.shop.user.dto.OrderResponse;
+import com.example.shop.user.dto.UpdateOrderRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +39,7 @@ public class OrderService {
     }
 
     @Transactional
-    public CreateOrderResponse createOrder(CreateOrderRequest request) {
+    public OrderResponse createOrder(CreateOrderRequest request) {
         // 유저 조회
         User user = getCurrentUser();
 
@@ -48,13 +50,7 @@ public class OrderService {
         }
 
         // 주문 생성 및 user, request 매핑
-        DeliveryInfo deliveryInfo = DeliveryInfo.builder()
-                .receiverPostalCode(request.getReceiverPostalCode())
-                .receiverName(request.getReceiverName())
-                .receiverAddress(request.getReceiverAddress())
-                .receiverPhone(request.getReceiverPhone())
-                .shippingMessage(request.getShippingMessage())
-                .build();
+        DeliveryInfo deliveryInfo = request.getDeliveryInfo().toDeliveryInfo();
 
         Order order = Order.createOrder()
                 .user(user)
@@ -77,6 +73,18 @@ public class OrderService {
         orderRepository.save(order);
         cartDetailRepository.deleteAllByUserId(user.getId());
 
-        return new CreateOrderResponse(order);
+        return new OrderResponse(order);
+    }
+
+    public OrderResponse updateOrder(String orderNumber, UpdateOrderRequest request) {
+        Order order = orderRepository.findByOrderNumber(orderNumber)
+                .orElseThrow(OrderNotFoundException::new);
+
+        // 주문 상태 확인
+        order.verifyUpdatable();
+
+        // 배송 정보 수정
+
+        return new OrderResponse(null);
     }
 }
