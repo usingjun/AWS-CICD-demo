@@ -6,7 +6,7 @@ import com.example.shop.auth.dto.*;
 import com.example.shop.domain.user.RefreshToken;
 import com.example.shop.domain.user.Role;
 import com.example.shop.domain.user.UserRepository;
-import com.example.shop.global.EmailSender;
+import com.example.shop.global.util.EmailSender;
 import com.example.shop.global.config.auth.JwtProvider;
 import com.example.shop.global.exception.DuplicatedEmailException;
 import com.example.shop.global.exception.RefreshTokenExpiredException;
