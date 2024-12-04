@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ProductCreateRequest {
+
     private String productName;
     private Long quantity;
     private Long price;
