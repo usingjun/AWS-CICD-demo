@@ -38,4 +38,17 @@ public class OrderDetail  extends BaseEntity {
     void setOrder(Order order) {
         this.order = order;
     }
+
+    // 주문 수정 시 수량 변경에 사용하는 메서드
+    public void updateQuantity(Product product, int newQuantity) {
+        int quantityDiff = this.quantity - newQuantity;
+        if (quantityDiff > 0) {
+            // 주문 수량을 줄였을 때
+            product.increaseQuantity(quantityDiff);
+        } else {
+            // 주문 수량을 늘렸을 때
+            product.decreaseQuantity(Math.abs(quantityDiff));
+        }
+        this.quantity = newQuantity;
+    }
 }

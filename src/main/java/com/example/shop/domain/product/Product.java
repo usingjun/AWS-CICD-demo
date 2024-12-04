@@ -29,6 +29,10 @@ public class Product  extends BaseEntity {
     private String image;
     private String description;
 
+    public void increaseQuantity(int quantity) {
+        this.quantity += quantity;
+    }
+
     public void decreaseQuantity(int quantity) {
         if (this.quantity - quantity < 0) {
             throw new NotEnoughQuantityException();

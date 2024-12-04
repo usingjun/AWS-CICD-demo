@@ -17,6 +17,7 @@ public class OrderResponse {
     private final BigDecimal totalPrice;     // 최종 결제 금액
     private final OrderStatus orderStatus;   // 주문 상태
     private final LocalDateTime orderDate;   // 주문 일시
+    private final LocalDateTime updatedOrderDate;   // 주문 수정 일시
     private final List<CreateOrderDetailInfo> orderDetails;  // 주문 상품 정보
     private final DeliveryInfoResponse deliveryInfo; // 배송 정보
 
@@ -25,6 +26,7 @@ public class OrderResponse {
         this.totalPrice = order.getTotalPrice();
         this.orderStatus = order.getOrderStatus();
         this.orderDate = order.getCreatedAt();
+        this.updatedOrderDate = order.getUpdatedAt();
         this.orderDetails = order.getOrderDetails().stream()
                 .map(CreateOrderDetailInfo::new)
                 .toList();
