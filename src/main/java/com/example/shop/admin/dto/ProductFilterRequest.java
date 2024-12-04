@@ -10,7 +10,7 @@ import lombok.*;
 public class ProductFilterRequest {
 
 
-    private int minQuantity;
-    private int minPrice;
-    private int maxPrice;
+    private Long minQuantity;
+    private Long minPrice;
+    private Long maxPrice;
 }

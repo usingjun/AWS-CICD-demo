@@ -1,6 +1,7 @@
 package com.example.shop.admin.controller;
 
 import com.example.shop.admin.dto.ProductCreateRequest;
+import com.example.shop.admin.dto.ProductFilterRequest;
 import com.example.shop.admin.dto.ProductUpdateRequest;
 import com.example.shop.admin.dto.ProductTO;
 import com.example.shop.admin.service.AdminProductService;
@@ -9,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -57,5 +60,26 @@ public class AdminProductController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<Object> getProductsByFilter(@ModelAttribute ProductFilterRequest productFilterRequest) {
+
+
+
+        try {
+            // Service 호출
+            List<ProductTO> products = adminProductService.getFilteredProducts(productFilterRequest);
+            return ResponseEntity.ok(products);
+        } catch (IllegalArgumentException e) {
+            // 예외 메시지를 클라이언트에 반환
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+
+    }
+
+
+
+
+
 
 }

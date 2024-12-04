@@ -33,7 +33,7 @@
             AND price >= #{minPrice}
         </if>
         <if test="maxPrice != null">
-            AND price <= #{maxPrice}
+            AND price &lt;=#{maxPrice}
         </if>
     </select>
 
