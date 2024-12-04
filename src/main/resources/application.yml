@@ -43,3 +43,12 @@ mybatis:
   type-aliases-package: com.example.shop.user.dto, com.example.shop.admin.dto
   configuration:
     map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    root: INFO
+    org.mybatis: DEBUG
+    org.apache.ibatis: DEBUG
+    org.mybatis.spring.SqlSessionFactoryBean: DEBUG
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: DEBUG
