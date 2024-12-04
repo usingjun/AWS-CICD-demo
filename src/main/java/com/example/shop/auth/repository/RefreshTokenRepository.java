@@ -1,7 +1,7 @@
 package com.example.shop.auth.repository;
 
 import com.example.shop.domain.user.RefreshToken;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 @Repository
 public class RefreshTokenRepository {
-    private final RedisTemplate redisTemplate;
-    public RefreshTokenRepository(final RedisTemplate redisTemplate) {
+    private final StringRedisTemplate redisTemplate;
+    public RefreshTokenRepository(final StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
     private final int EXPIRE_TIME=7;
