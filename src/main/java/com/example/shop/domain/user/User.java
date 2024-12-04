@@ -2,6 +2,7 @@ package com.example.shop.domain.user;
 
 import com.example.shop.domain.BaseEntity;
 import com.example.shop.domain.cart.CartDetail;
+import com.example.shop.domain.order.Order;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -37,4 +38,7 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user")
     private List<CartDetail> cartDetails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders = new ArrayList<>();
 }

@@ -3,11 +3,17 @@
 
 <mapper namespace="com.example.shop.admin.mapper.AdminMapper">
 
-    <select id="selectAllProduct" resultType="ProductTO">
+    <!-- 데이터 업데이트 -->
+    <update id="updateProduct" parameterType="ProductUpdateRequest">
+        update product
+        set quantity=#{quantity}, price=#{price}, image=#{image}, description=#{description}, updated_at=Now()
+        where product_Id=#{productId}
+    </update>
 
-        select product_id,product_name,quantity,price,image,description,created_at,updated_at
+    <!-- 모든 제품 조회 -->
+    <select id="selectAllProduct" resultType="ProductTO">
+        select product_id, product_name, quantity, price, image, description, created_at, updated_at
         from product
     </select>
-
 
 </mapper>

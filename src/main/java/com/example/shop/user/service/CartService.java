@@ -6,7 +6,7 @@ import com.example.shop.domain.product.Product;
 import com.example.shop.domain.product.ProductRepository;
 import com.example.shop.domain.user.User;
 import com.example.shop.domain.user.UserRepository;
-import com.example.shop.global.exception.CartEmptyException;
+import com.example.shop.global.exception.EmptyCartException;
 import com.example.shop.global.exception.CartProductNotFoundException;
 import com.example.shop.global.exception.ProductNotFoundException;
 import com.example.shop.global.exception.UserNotFoundException;
@@ -91,7 +91,7 @@ public class CartService {
 
         // 장바구니가 비어있는지 확인
         if (cartDetails.isEmpty()) {
-            throw new CartEmptyException();
+            throw new EmptyCartException();
         }
 
         cartDetailRepository.deleteAllByUserId(user.getId());
