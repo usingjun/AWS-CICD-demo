@@ -6,6 +6,7 @@ import com.example.shop.domain.product.Product;
 import com.example.shop.domain.product.ProductRepository;
 import com.example.shop.domain.user.User;
 import com.example.shop.domain.user.UserRepository;
+import com.example.shop.global.exception.CartEmptyException;
 import com.example.shop.global.exception.CartProductNotFoundException;
 import com.example.shop.global.exception.ProductNotFoundException;
 import com.example.shop.global.exception.UserNotFoundException;
@@ -67,14 +68,40 @@ public class CartService {
 
         // 삭제할 상품이 장바구니에 있는지 확인
         CartDetail cartDetail = cartDetailRepository.findByUserIdAndProductId(user.getId(), productId)
-                                                    .orElseThrow(CartProductNotFoundException::new);
+                .orElseThrow(CartProductNotFoundException::new);
 
-        cartDetailRepository.deleteByUserIdAndProductId(user.getId(), productId);
+        cartDetailRepository.delete(cartDetail);
     }
+
+    @Transactional
+    public void updateCartQuantity(Long productId, int quantity) {
+        User user = getCurrentUser();
+
+        // 수정할 상품이 장바구니에 있는지 확인
+        CartDetail cartDetail = cartDetailRepository.findByUserIdAndProductId(user.getId(), productId)
+                .orElseThrow(CartProductNotFoundException::new);
+
+        cartDetail.changeQuantity(quantity);
+    }
+
+    @Transactional
+    public void removeAllCartProducts() {
+        User user = getCurrentUser();
+        List<CartDetail> cartDetails = cartDetailRepository.findByUserId(user.getId());
+
+        // 장바구니가 비어있는지 확인
+        if (cartDetails.isEmpty()) {
+            throw new CartEmptyException();
+        }
+
+        cartDetailRepository.deleteAllByUserId(user.getId());
+    }
+
 
     private User getCurrentUser() {
         String email = SecurityUtil.getCurrentUserEmail();
         return userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
     }
+
 }
