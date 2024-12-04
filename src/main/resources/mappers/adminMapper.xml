@@ -22,4 +22,19 @@
 
     </insert>
 
+    <select id="selectProductByFilter" parameterType="ProductFilterRequest" resultType="ProductTO">
+        select product_id, product_name, quantity, price, image, description, created_at, updated_at
+        from product
+        where 1=1
+        <if test="minQuantity != null">
+            AND quantity >= #{minQuantity}
+        </if>
+        <if test="minPrice != null">
+            AND price >= #{minPrice}
+        </if>
+        <if test="maxPrice != null">
+            AND price <= #{maxPrice}
+        </if>
+    </select>
+
 </mapper>
