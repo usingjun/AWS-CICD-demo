@@ -1,6 +1,7 @@
 package com.example.shop.admin.dao;
 
 import com.example.shop.admin.dto.ProductCreateRequest;
+import com.example.shop.admin.dto.ProductFilterRequest;
 import com.example.shop.admin.dto.ProductUpdateRequest;
 import com.example.shop.admin.dto.ProductTO;
 import com.example.shop.admin.mapper.AdminMapper;
@@ -28,5 +29,8 @@ public class AdminDAO {
 
     public int createProduct(ProductCreateRequest productCreateRequest) {
         return adminMapper.insertProduct(productCreateRequest);
+    }
+    public List<ProductTO> getProductByFilter(ProductFilterRequest productFilterRequest) {
+            return adminMapper.selectProductByFilter(productFilterRequest);
     }
 }

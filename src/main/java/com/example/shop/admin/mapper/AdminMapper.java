@@ -1,6 +1,7 @@
 package com.example.shop.admin.mapper;
 
 import com.example.shop.admin.dto.ProductCreateRequest;
+import com.example.shop.admin.dto.ProductFilterRequest;
 import com.example.shop.admin.dto.ProductUpdateRequest;
 import com.example.shop.admin.dto.ProductTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,4 +18,6 @@ public interface AdminMapper {
     List<ProductTO> selectAllProduct();
 
     int insertProduct(ProductCreateRequest productCreateRequest);
+
+    List<ProductTO> selectProductByFilter(ProductFilterRequest productFilterRequest);
 }
