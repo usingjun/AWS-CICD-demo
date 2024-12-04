@@ -1,5 +1,6 @@
 package com.example.shop.admin.dao;
 
+import com.example.shop.admin.dto.ProductCreateRequest;
 import com.example.shop.admin.dto.ProductUpdateRequest;
 import com.example.shop.admin.dto.ProductTO;
 import com.example.shop.admin.mapper.AdminMapper;
@@ -22,5 +23,10 @@ public class AdminDAO {
     // main 브랜치에서 추가된 메서드
     public List<ProductTO> getAllProducts() {
         return adminMapper.selectAllProduct();
+    }
+
+
+    public int createProduct(ProductCreateRequest productCreateRequest) {
+        return adminMapper.insertProduct(productCreateRequest);
     }
 }

@@ -16,4 +16,10 @@
         from product
     </select>
 
+    <insert id="insertProduct"  parameterType="ProductCreateRequest">
+
+        insert into product(product_name,quantity,price,image,description,created_at ,updated_at) values (#{productName},#{quantity},#{price},#{image},#{description},Now(),NOW())
+
+    </insert>
+
 </mapper>

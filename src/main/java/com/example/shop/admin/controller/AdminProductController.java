@@ -1,5 +1,6 @@
 package com.example.shop.admin.controller;
 
+import com.example.shop.admin.dto.ProductCreateRequest;
 import com.example.shop.admin.dto.ProductUpdateRequest;
 import com.example.shop.admin.dto.ProductTO;
 import com.example.shop.admin.service.AdminProductService;
@@ -46,4 +47,15 @@ public class AdminProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result); // 400 Bad Request
         }
     }
+    @PostMapping
+    public ResponseEntity<String> insertProduct(@RequestBody ProductCreateRequest product) {
+        String result = adminProductService.insertProduct(product);
+
+        if ("정상적으로 입력되지 않았습니다".equals(result)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    }
+
 }
