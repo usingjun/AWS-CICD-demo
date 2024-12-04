@@ -2,6 +2,7 @@ package com.example.shop.user.controller;
 
 import com.example.shop.user.dto.AddCartProductRequest;
 import com.example.shop.user.dto.CartDetailResponse;
+import com.example.shop.user.dto.UpdateCartQuantityRequest;
 import com.example.shop.user.service.CartService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,12 @@ public class CartController {
     public ResponseEntity<Void> removeCartProduct(@PathVariable("productId") Long productId) {
         cartService.removeCartProduct(productId);
         return ResponseEntity.ok().build();
+    }
+
+
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<Void> updateCartQuantity(@PathVariable("productId") Long productId, @RequestBody @Valid UpdateCartQuantityRequest request) {
+        cartService.updateCartQuantity(productId, request.getQuantity());
     }
 
     @DeleteMapping("/products")
