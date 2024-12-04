@@ -12,6 +12,7 @@ public enum ErrorCodes {
     NO_BEARER(HttpStatus.BAD_REQUEST,"bearer 타입 토큰이 존재하지 않습니다"),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT,"중복 이메일입니다"),
     LOG_IN_NOT_MATCH(HttpStatus.BAD_REQUEST, "로그인 정보가 일치하지 않습니다"),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST,"리프레시 토큰이 만료되었습니다. 다시 로그인해주세요"),
     NO_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "인증 정보가 존재하지 않습니다"),
 
     // 장바구니 관련
