@@ -34,4 +34,10 @@ public class CartController {
         cartService.removeCartProduct(productId);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/products")
+    public ResponseEntity<Void> removeAllCartProducts() {
+        cartService.removeAllCartProducts();
+        return ResponseEntity.ok().build();
+    }
 }
