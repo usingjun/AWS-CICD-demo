@@ -18,7 +18,7 @@ public class OrderResponse {
     private final OrderStatus orderStatus;   // 주문 상태
     private final LocalDateTime orderDate;   // 주문 일시
     private final LocalDateTime updatedOrderDate;   // 주문 수정 일시
-    private final List<CreateOrderDetailInfo> orderDetails;  // 주문 상품 정보
+    private final List<OrderDetailResponse> orderDetails;  // 주문 상품 정보
     private final DeliveryInfoResponse deliveryInfo; // 배송 정보
 
     public OrderResponse(Order order) {
@@ -28,7 +28,7 @@ public class OrderResponse {
         this.orderDate = order.getCreatedAt();
         this.updatedOrderDate = order.getUpdatedAt();
         this.orderDetails = order.getOrderDetails().stream()
-                .map(CreateOrderDetailInfo::new)
+                .map(OrderDetailResponse::new)
                 .toList();
         this.deliveryInfo = new DeliveryInfoResponse(order.getDeliveryInfo());
     }
@@ -51,13 +51,13 @@ public class OrderResponse {
     }
 
     @Getter
-    public static class CreateOrderDetailInfo {
+    public static class OrderDetailResponse {
         private final Long productId;        // 상품 ID
         private final String productName;    // 상품명
         private final int quantity;          // 주문 수량
         private final BigDecimal price;      // 상품 가격
 
-        public CreateOrderDetailInfo(OrderDetail orderDetail) {
+        public OrderDetailResponse(OrderDetail orderDetail) {
             this.productId = orderDetail.getProduct().getId();
             this.productName = orderDetail.getProduct().getProductName();
             this.quantity = orderDetail.getQuantity();
