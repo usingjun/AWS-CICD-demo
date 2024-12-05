@@ -1,5 +1,7 @@
 package com.example.shop.user.dto;
 
+import com.example.shop.domain.order.DeliveryInfo;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,26 +9,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class CreateOrderRequest {
-
+    @Valid
     @NotNull
-    private String receiverAddress;
+    private CreateDeliveryInfoRequest deliveryInfo;
 
-    @NotNull
-    private String receiverName;
+    @Getter
+    @NoArgsConstructor
+    public static class CreateDeliveryInfoRequest {
+        @NotNull
+        private String receiverAddress;
 
-    @NotNull
-    private String receiverPhone;
+        @NotNull
+        private String receiverName;
 
-    @NotNull
-    private String receiverPostalCode;
+        @NotNull
+        private String receiverPhone;
 
-    private String shippingMessage;
+        @NotNull
+        private String receiverPostalCode;
 
-    public CreateOrderRequest(String receiverAddress, String receiverName, String receiverPhone, String receiverPostalCode, String shippingMessage) {
-        this.receiverAddress = receiverAddress;
-        this.receiverName = receiverName;
-        this.receiverPhone = receiverPhone;
-        this.receiverPostalCode = receiverPostalCode;
-        this.shippingMessage = shippingMessage;
+        private String shippingMessage;
+
+        // 엔티티의 DeliveryInfo로 변환
+        public DeliveryInfo toDeliveryInfo() {
+            return DeliveryInfo.builder()
+                    .receiverAddress(receiverAddress)
+                    .receiverName(receiverName)
+                    .receiverPhone(receiverPhone)
+                    .receiverPostalCode(receiverPostalCode)
+                    .shippingMessage(shippingMessage)
+                    .build();
+        }
     }
 }

@@ -12,6 +12,7 @@ public enum ErrorCodes {
     NO_BEARER(HttpStatus.BAD_REQUEST,"bearer 타입 토큰이 존재하지 않습니다"),
     DUPLICATE_EMAIL(HttpStatus.CONFLICT,"중복 이메일입니다"),
     LOG_IN_NOT_MATCH(HttpStatus.BAD_REQUEST, "로그인 정보가 일치하지 않습니다"),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST,"리프레시 토큰이 만료되었습니다. 다시 로그인해주세요"),
     NO_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "인증 정보가 존재하지 않습니다"),
 
     // 장바구니 관련
@@ -22,6 +23,10 @@ public enum ErrorCodes {
 
     // 주문 관련
     EMPTY_ORDER_DETAIL(HttpStatus.BAD_REQUEST, "주문 상세 내역이 존재하지 않습니다."),
+    ORDER_NOT_FOUND(HttpStatus.BAD_REQUEST, "주문 내역이 존재하지 않습니다."),
+    NOT_MODIFIABLE_ORDER(HttpStatus.BAD_REQUEST, "주문을 수정할 수 없는 상태입니다."),
+    ORDER_DETAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "주문 상세 내역을 찾을수 없습니다."),
+    UNAUTHORIZED_ORDER_ACCESS(HttpStatus.BAD_REQUEST, "주문자 본인만 접근할 수 있습니다."),
 
     // 재고 관련
     NOT_ENOUGH_QUANTITY(HttpStatus.BAD_REQUEST, "상품 수량이 부족합니다."),

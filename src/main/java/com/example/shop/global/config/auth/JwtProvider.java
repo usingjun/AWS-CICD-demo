@@ -1,6 +1,7 @@
 package com.example.shop.global.config.auth;
 
 import com.example.shop.auth.dto.TokenDto;
+import com.example.shop.domain.user.RefreshToken;
 import com.example.shop.global.exception.NoAuthAccessTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -55,6 +56,7 @@ public class JwtProvider {
         return TokenDto.builder()
                 .grantType("Bearer")
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -77,7 +79,7 @@ public class JwtProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 
-    private Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String accessToken) {
         //reissue 하는 경우에 토큰 관련 exception은 여기서 걸림
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
@@ -87,4 +89,5 @@ public class JwtProvider {
             throw new MalformedJwtException("잘못된 형식의 토큰입니다");
         }
     }
+
 }

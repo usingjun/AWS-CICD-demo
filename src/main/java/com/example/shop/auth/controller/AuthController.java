@@ -20,16 +20,20 @@ public class AuthController {
 
     @Operation(summary = "로그인")
     @PostMapping("/sign-in")
-    public SignInResponse signIn(@RequestBody SignInRequest signInRequest) {
-        return authService.signIn(signInRequest);
+    public ResponseEntity<AccessTokenResponse> signIn(@RequestBody SignInRequest signInRequest) {
+        return ResponseEntity.ok(authService.signIn(signInRequest));
     }
 
     @Operation(summary = "회원가입")
     @PostMapping("/sign-up")
-    public SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest) { return authService.signUp(signUpRequest, Role.ROLE_USER); }
+    public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
+        return ResponseEntity.ok(authService.signUp(signUpRequest, Role.ROLE_USER));
+    }
     @Operation(summary = "회원가입")
     @PostMapping("/sign-up/admin")
-    public SignUpResponse signUpAdmin(@RequestBody SignUpRequest signUpRequest) { return authService.signUp(signUpRequest, Role.ROLE_ADMIN); }
+    public ResponseEntity<SignUpResponse> signUpAdmin(@RequestBody SignUpRequest signUpRequest) {
+        return ResponseEntity.ok(authService.signUp(signUpRequest, Role.ROLE_ADMIN));
+    }
 
     @GetMapping("/test/user")
     public String testUser() {
@@ -55,6 +59,12 @@ public class AuthController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+    }
+
+    @Operation(summary = "액세스 토큰 재발급")
+    @PostMapping("/reissue")
+    public ResponseEntity<AccessTokenResponse> reissue(@RequestBody String accessToken) {
+        return ResponseEntity.ok(authService.reissue(accessToken));
     }
 
 }
