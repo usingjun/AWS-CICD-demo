@@ -3,6 +3,7 @@ package com.example.shop.admin.controller;
 import com.example.shop.admin.dto.AdminOrderListResponse;
 import com.example.shop.admin.dto.AdminOrderResponse;
 import com.example.shop.admin.dto.OrderDeliveryListRequest;
+import com.example.shop.admin.dto.OrderSearchRequest;
 import com.example.shop.admin.service.AdminOrderService;
 import com.example.shop.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,8 +34,10 @@ public class AdminOrderController {
 
     @GetMapping
     public ResponseEntity<PageResponse<AdminOrderListResponse>> getOrders(
-            @RequestParam(defaultValue = "1") int page
-            , @RequestParam(defaultValue = "10") int size) {
-        return null;
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @ModelAttribute OrderSearchRequest request) {
+        PageResponse<AdminOrderListResponse> response = adminOrderService.searchOrders(request, page, size);
+        return ResponseEntity.ok(response);
     }
 }

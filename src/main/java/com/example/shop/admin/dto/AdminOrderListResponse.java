@@ -6,10 +6,12 @@ import lombok.Getter;
 
 @Getter
 public class AdminOrderListResponse extends OrderListResponse {
-    private final String userName;  // 주문자 이름
+    private final String orderName;  // 주문자 이름
+    private final String receiverName;  // 수령자 이름
 
     public AdminOrderListResponse(Order order) {
         super(order);
-        this.userName = order.getUser().getUserName();
+        this.orderName = order.getUser().getUserName();
+        this.receiverName = order.getDeliveryInfo().getReceiverName();
     }
 }

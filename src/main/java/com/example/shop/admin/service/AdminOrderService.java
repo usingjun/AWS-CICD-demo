@@ -1,14 +1,20 @@
 package com.example.shop.admin.service;
 
 import com.example.shop.admin.dao.OrderDeliveryRepository;
+import com.example.shop.admin.dto.AdminOrderListResponse;
 import com.example.shop.admin.dto.AdminOrderResponse;
 import com.example.shop.admin.dto.OrderDeliveryRequest;
+import com.example.shop.admin.dto.OrderSearchRequest;
+import com.example.shop.common.dto.PageResponse;
 import com.example.shop.domain.order.Order;
 import com.example.shop.domain.order.OrderRepository;
 import com.example.shop.domain.order.OrderStatus;
 import com.example.shop.global.exception.OrderNotFoundException;
 import com.example.shop.global.util.EmailSender;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,5 +96,13 @@ public class AdminOrderService {
                 .orElseThrow(OrderNotFoundException::new);
 
         return new AdminOrderResponse(order);
+    }
+
+    public PageResponse<AdminOrderListResponse> searchOrders(OrderSearchRequest request, int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Order> orderPage = orderRepository.searchOrders(request, pageable);
+
+        Page<AdminOrderListResponse> responsePage = orderPage.map(AdminOrderListResponse::new);
+        return new PageResponse<>(responsePage);
     }
 }
