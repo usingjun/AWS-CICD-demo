@@ -1,6 +1,7 @@
 package com.example.shop.user.service;
 
 import com.example.shop.admin.service.OrderAdminService;
+import com.example.shop.common.dto.PageResponse;
 import com.example.shop.domain.cart.CartDetail;
 import com.example.shop.domain.cart.CartDetailRepository;
 import com.example.shop.domain.order.DeliveryInfo;
@@ -14,10 +15,14 @@ import com.example.shop.domain.user.UserRepository;
 import com.example.shop.global.exception.*;
 import com.example.shop.global.util.SecurityUtil;
 import com.example.shop.user.dto.CreateOrderRequest;
+import com.example.shop.user.dto.OrderListResponse;
 import com.example.shop.user.dto.OrderResponse;
 import com.example.shop.user.dto.UpdateOrderRequest;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -141,5 +146,16 @@ public class OrderService {
         }
 
         return new OrderResponse(order);
+    }
+
+    public PageResponse<OrderListResponse> getOrders(int page, int size) {
+        // 유저 조회
+        User user = getCurrentUser();
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<Order> orders = orderRepository.findByUserId(user.getId(), pageable);
+        Page<OrderListResponse> orderListResponse = orders.map(OrderListResponse::new);
+
+        return new PageResponse<>(orderListResponse);
     }
 }
