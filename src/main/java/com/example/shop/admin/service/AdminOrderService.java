@@ -21,7 +21,7 @@ import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKeyYest
 
 @Service
 @RequiredArgsConstructor
-public class OrderAdminService {
+public class AdminOrderService {
 
     private final EmailSender emailSender;
     private final OrderDeliveryRepository orderDeliveryRepository;
@@ -44,9 +44,10 @@ public class OrderAdminService {
             order.changeStatus(OrderStatus.SHIPPING);
 
             // 캐싱된 배송 대기 주문 데이터 삭제
-            boolean isExist = orderDeliveryRepository.existOrder(getOrderKeyToday(), orderRequest);
+            String key = getOrderKeyToday();
+            boolean isExist = orderDeliveryRepository.existOrder(key, orderRequest);
             if (isExist) {
-                orderDeliveryRepository.removeOrderEmail(getOrderKeyToday(), orderRequest);
+                orderDeliveryRepository.removeOrderEmail(key, orderRequest);
             } else {
                 orderDeliveryRepository.removeOrderEmail(getOrderKeyYesterday(), orderRequest);
             }

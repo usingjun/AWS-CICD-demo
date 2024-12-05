@@ -1,7 +1,7 @@
 package com.example.shop.admin.controller;
 
 import com.example.shop.admin.dto.OrderDeliveryListRequest;
-import com.example.shop.admin.service.OrderAdminService;
+import com.example.shop.admin.service.AdminOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AdminOrderController {
 
-    private final OrderAdminService orderAdminService;
+    private final AdminOrderService adminOrderService;
 
     @Operation(summary = "관리자 주문 배송 일괄 처리")
     @PatchMapping("/delivery")
     public ResponseEntity<Void> updateOrderStatusDelivery(@RequestBody @Valid OrderDeliveryListRequest orderDeliveryListRequest) {
-        orderAdminService.updateOrderStatusDelivery(orderDeliveryListRequest.getOrderDeliveryRequests());
+        adminOrderService.updateOrderStatusDelivery(orderDeliveryListRequest.getOrderDeliveryRequests());
         return ResponseEntity.ok().build();
     }
 }
