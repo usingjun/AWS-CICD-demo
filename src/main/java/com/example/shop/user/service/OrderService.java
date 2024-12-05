@@ -124,4 +124,19 @@ public class OrderService {
 
         return new OrderResponse(order);
     }
+
+    public OrderResponse getOrder(String orderNumber) {
+        // 유저 조회
+        User user = getCurrentUser();
+
+        Order order = orderRepository.findOrderAndOrderDetailByOrderNumber(orderNumber)
+                .orElseThrow(OrderNotFoundException::new);
+
+        // 주문자 본인 확인
+        if (!order.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedOrderAccessException();
+        }
+
+        return new OrderResponse(order);
+    }
 }

@@ -28,5 +28,9 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
-
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<OrderResponse> getOrder(@PathVariable String orderNumber) {
+        OrderResponse orderResponse = orderService.getOrder(orderNumber);
+        return ResponseEntity.ok(orderResponse);
+    }
 }
