@@ -1,5 +1,6 @@
 package com.example.shop.user.service;
 
+import com.example.shop.admin.service.OrderAdminService;
 import com.example.shop.domain.cart.CartDetail;
 import com.example.shop.domain.cart.CartDetailRepository;
 import com.example.shop.domain.order.DeliveryInfo;
@@ -31,6 +32,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final CartDetailRepository cartDetailRepository;
     private final ProductRepository productRepository;
+    private final OrderAdminService orderAdminService;
 
     private User getCurrentUser() {
         String email = SecurityUtil.getCurrentUserEmail();
@@ -70,8 +72,10 @@ public class OrderService {
         // OrderDetail 생성
         order.createOrderDetailsFromCart(cartDetails);
 
-        orderRepository.save(order);
+        Order createdOrder = orderRepository.save(order);
         cartDetailRepository.deleteAllByUserId(user.getId());
+      
+        orderAdminService.cachingDeliveryOrder(user.getEmail(), order.getId());
 
         return new OrderResponse(order);
     }

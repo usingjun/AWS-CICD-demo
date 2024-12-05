@@ -5,11 +5,11 @@ import com.example.shop.auth.repository.RefreshTokenRepository;
 import com.example.shop.auth.dto.*;
 import com.example.shop.domain.user.RefreshToken;
 import com.example.shop.domain.user.Role;
-import com.example.shop.domain.user.User;
 import com.example.shop.domain.user.UserRepository;
-import com.example.shop.global.EmailSender;
+import com.example.shop.global.util.EmailSender;
 import com.example.shop.global.config.auth.JwtProvider;
 import com.example.shop.global.exception.DuplicatedEmailException;
+import com.example.shop.global.exception.RefreshTokenExpiredException;
 import com.example.shop.global.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +25,6 @@ import static com.example.shop.auth.service.EmailCodeUtil.generateEmailCode;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class AuthService {
     private final JwtProvider jwtProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -35,12 +34,14 @@ public class AuthService {
     private final EmailCodeRepository emailCodeRepository;
     private final EmailSender emailSender;
 
-    public SignInResponse signIn(SignInRequest signInRequest) {
+
+    public AccessTokenResponse signIn(SignInRequest signInRequest) {
         Authentication authentication = setAuthentication(signInRequest.getEmail(), signInRequest.getPassword());
         TokenDto tokenDto = jwtProvider.generateToken(authentication);
-        //saveRefreshToken(tokenDto.getRefreshToken(), signInRequest.getEmail());
-        return SignInResponse.of(tokenDto.getAccessToken(),tokenDto.getGrantType());
+        deleteAndSaveRefreshToken(tokenDto.getRefreshToken(), getMemberIdByEmail(signInRequest.getEmail()));
+        return new AccessTokenResponse(tokenDto.getAccessToken(),tokenDto.getGrantType());
     }
+
     @Transactional
     public SignUpResponse signUp(SignUpRequest signUpRequest, Role role) {
         checkDuplicatedEmail(signUpRequest);
@@ -57,11 +58,11 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return authentication;
     }
-    private void saveRefreshToken(String tokenValue, String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
-        refreshTokenRepository.save(new RefreshToken(tokenValue, user.getId().toString()));
+    private void deleteAndSaveRefreshToken(String tokenValue, Long memberId) {
+        refreshTokenRepository.deleteByMemberId(memberId);
+        refreshTokenRepository.save(new RefreshToken(memberId, tokenValue));
     }
+
     private void checkDuplicatedEmail(SignUpRequest signUpRequest) {
         if(userRepository.existsByEmail(signUpRequest.getEmail())) throw new DuplicatedEmailException();
     }
@@ -85,5 +86,31 @@ public class AuthService {
                 })
                 .orElse(Boolean.FALSE);  // 값이 없거나 인증 코드가 다르면 false 반환
     }
+
+    public AccessTokenResponse reissue(String accessToken) {
+        Long memberId = getMemberIdByAccessToken(accessToken);
+
+        validateRefreshToken(memberId); // 리프레시 토큰 존재여부 확인
+        Authentication authentication = jwtProvider.getAuthentication(accessToken);
+        TokenDto tokenDto = jwtProvider.generateToken(authentication); //토큰 재발급
+
+        deleteAndSaveRefreshToken(tokenDto.getRefreshToken(),memberId);
+        return new AccessTokenResponse(tokenDto.getAccessToken(),tokenDto.getGrantType());
+    }
+
+    public Long getMemberIdByAccessToken(String accessToken) {
+        return userRepository.findByEmail(jwtProvider.parseClaims(accessToken).getSubject())
+                .orElseThrow(UserNotFoundException::new)
+                .getId();
+    }
+    public Long getMemberIdByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(UserNotFoundException::new)
+                .getId();
+    }
+    private void validateRefreshToken(Long memberId) {
+        refreshTokenRepository.findByMemberId(memberId).orElseThrow(RefreshTokenExpiredException::new);
+    }
+
 
 }
