@@ -5,12 +5,15 @@ import com.example.shop.domain.cart.CartDetail;
 import com.example.shop.domain.user.User;
 import com.example.shop.global.exception.EmptyCartException;
 import com.example.shop.global.exception.EmptyOrderDetailException;
+import com.example.shop.global.exception.NotModifiableOrderException;
+import com.example.shop.user.dto.UpdateOrderRequest;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -112,8 +115,38 @@ public class Order extends BaseEntity {
     private String generateOrderNumber() {
         LocalDateTime now = LocalDateTime.now();
         String datePart = now.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String uniquePart = UUID.randomUUID().toString().substring(0, 12).toUpperCase();
+        String uniquePart = UUID.randomUUID().toString().substring(0, 13).toUpperCase().replace("-", "");
 
         return String.format("%s_%s", datePart, uniquePart);
+    }
+
+    // 주문 상태 확인
+    public void verifyUpdatable() {
+        if (this.orderStatus != OrderStatus.PAID) {
+            throw new NotModifiableOrderException();
+        }
+    }
+
+    // 수령자 정보 수정
+    public void updateDeliveryInfo(UpdateOrderRequest.UpdateDeliveryInfoRequest request) {
+        DeliveryInfo currentInfo = this.deliveryInfo;
+
+        this.deliveryInfo = DeliveryInfo.builder()
+                .receiverAddress(StringUtils.hasText(request.getReceiverAddress()) ?
+                        request.getReceiverAddress() : currentInfo.getReceiverAddress())
+                .receiverName(StringUtils.hasText(request.getReceiverName()) ?
+                        request.getReceiverName() : currentInfo.getReceiverName())
+                .receiverPhone(StringUtils.hasText(request.getReceiverPhone()) ?
+                        request.getReceiverPhone() : currentInfo.getReceiverPhone())
+                .receiverPostalCode(StringUtils.hasText(request.getReceiverPostalCode()) ?
+                        request.getReceiverPostalCode() : currentInfo.getReceiverPostalCode())
+                .shippingMessage(StringUtils.hasText(request.getShippingMessage()) ?
+                        request.getShippingMessage() : currentInfo.getShippingMessage())
+                .build();
+    }
+
+    // 금액 재계산 후 세팅
+    public void updateTotalPrice() {
+        this.totalPrice = calculateTotalPrice();
     }
 }

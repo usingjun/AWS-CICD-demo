@@ -23,6 +23,10 @@ public enum ErrorCodes {
 
     // 주문 관련
     EMPTY_ORDER_DETAIL(HttpStatus.BAD_REQUEST, "주문 상세 내역이 존재하지 않습니다."),
+    ORDER_NOT_FOUND(HttpStatus.BAD_REQUEST, "주문 내역이 존재하지 않습니다."),
+    NOT_MODIFIABLE_ORDER(HttpStatus.BAD_REQUEST, "주문을 수정할 수 없는 상태입니다."),
+    ORDER_DETAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "주문 상세 내역을 찾을수 없습니다."),
+    UNAUTHORIZED_ORDER_ACCESS(HttpStatus.BAD_REQUEST, "주문자 본인만 수정할 수 있습니다."),
 
     // 재고 관련
     NOT_ENOUGH_QUANTITY(HttpStatus.BAD_REQUEST, "상품 수량이 부족합니다."),
