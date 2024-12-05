@@ -43,3 +43,6 @@ out/
 
 ### redis directory ###
 redis/
+
+### QueryDSL QClass ###
+**/generated/
