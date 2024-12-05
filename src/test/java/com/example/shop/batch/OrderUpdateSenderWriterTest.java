@@ -3,7 +3,7 @@ package com.example.shop.batch;
 import com.example.shop.admin.dao.OrderDeliveryRepository;
 import com.example.shop.admin.dto.OrderDeliveryRequest;
 import com.example.shop.admin.mapper.AdminMapper;
-import com.example.shop.admin.service.OrderAdminService;
+import com.example.shop.admin.service.AdminOrderService;
 import com.example.shop.domain.order.Order;
 import com.example.shop.domain.order.OrderRepository;
 import com.example.shop.domain.order.OrderStatus;
@@ -31,7 +31,7 @@ import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKeyYest
 class OrderUpdateSenderWriterTest {
 
     @Autowired
-    private OrderAdminService orderAdminService;
+    private AdminOrderService adminOrderService;
     @Autowired
     private OrderDeliveryRepository orderDeliveryRepository;
     @Autowired
@@ -70,7 +70,7 @@ class OrderUpdateSenderWriterTest {
             sqlSession.flushStatements();
 
         } finally {
-            orderDeliveryRequestList.forEach(orderAdminService::sendDeliveryAlertEmail);
+            orderDeliveryRequestList.forEach(adminOrderService::sendDeliveryAlertEmail);
             orderDeliveryRepository.removeOrderEmail(getOrderKeyYesterday(), orderDeliveryRequestList.toArray());
         }
 

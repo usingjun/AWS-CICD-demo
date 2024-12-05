@@ -1,6 +1,6 @@
 package com.example.shop.user.service;
 
-import com.example.shop.admin.service.OrderAdminService;
+import com.example.shop.admin.service.AdminOrderService;
 import com.example.shop.common.dto.PageResponse;
 import com.example.shop.domain.cart.CartDetail;
 import com.example.shop.domain.cart.CartDetailRepository;
@@ -37,7 +37,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final CartDetailRepository cartDetailRepository;
     private final ProductRepository productRepository;
-    private final OrderAdminService orderAdminService;
+    private final AdminOrderService adminOrderService;
 
     private User getCurrentUser() {
         String email = SecurityUtil.getCurrentUserEmail();
@@ -80,7 +80,7 @@ public class OrderService {
         Order createdOrder = orderRepository.save(order);
         cartDetailRepository.deleteAllByUserId(user.getId());
       
-        orderAdminService.cachingDeliveryOrder(user.getEmail(), order.getId());
+        adminOrderService.cachingDeliveryOrder(user.getEmail(), order.getId());
 
         return new OrderResponse(order);
     }
@@ -127,7 +127,7 @@ public class OrderService {
             order.updateTotalPrice();
 
             // 캐싱된 주문 수정
-            orderAdminService.updateCachingOrder(user.getEmail(), order.getId());
+            adminOrderService.updateCachingOrder(user.getEmail(), order.getId());
         }
 
         return new OrderResponse(order);
