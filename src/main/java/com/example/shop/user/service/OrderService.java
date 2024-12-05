@@ -137,7 +137,7 @@ public class OrderService {
         // 유저 조회
         User user = getCurrentUser();
 
-        Order order = orderRepository.findOrderAndOrderDetailByOrderNumber(orderNumber)
+        Order order = orderRepository.findOrderAndOrderDetailAndProductByOrderNumber(orderNumber)
                 .orElseThrow(OrderNotFoundException::new);
 
         // 주문자 본인 확인
