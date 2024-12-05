@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDao {
@@ -21,7 +22,11 @@ public class UserDao {
         return userMapper.getAllProducts();
     }
 
-    public ProductResponse getProductDetail(Long id) {
-        return userMapper.getProductDetail(id);
+    public ProductResponse getProductDetail(Long productId) {
+        return userMapper.getProductDetail(productId);
+    }
+
+    public List<ProductResponse> getProductByNameOrPrice(Map<String, Object> params) {
+        return userMapper.getProductByNameOrPrice(params);
     }
 }

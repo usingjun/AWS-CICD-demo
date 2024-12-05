@@ -38,3 +38,5 @@ out/
 
 ### security.properties ###
 **/resources/*.properties
+
+.DS_Store

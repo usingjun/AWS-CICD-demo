@@ -1,18 +1,19 @@
 package com.example.shop.user.dto;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.type.Alias;
 
 @Getter
-@Builder
+@RequiredArgsConstructor
 @Alias(value = "productResponse")
 public class ProductResponse {
 
-    private Long id;
-    private String productName;
-    private Long price;
+    @NonNull private Long productId;
+    @NonNull private String productName;
+    @NonNull private Long price;
     private String description;
-    private String image;
+    @NonNull private String image;
 
 }
