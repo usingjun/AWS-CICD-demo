@@ -2,17 +2,14 @@ package com.example.shop.user.controller;
 
 import com.example.shop.common.dto.PageResponse;
 import com.example.shop.user.dto.CreateOrderRequest;
-import com.example.shop.user.dto.OrderListResponse;
-import com.example.shop.user.dto.OrderResponse;
+import com.example.shop.common.dto.OrderListResponse;
+import com.example.shop.common.dto.OrderResponse;
 import com.example.shop.user.dto.UpdateOrderRequest;
 import com.example.shop.user.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
