@@ -3,10 +3,8 @@ package com.example.shop.user.controller;
 import com.example.shop.user.dto.ProductResponse;
 import com.example.shop.user.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,12 +19,26 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponse> getAllProducts() {
-        return productService.getAllProducts();
+    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+        return ResponseEntity.ok(productService.getAllProducts());
     }
 
-    @GetMapping("/{id}")
-    public ProductResponse getProductDetail(@PathVariable Long id) {
-        return productService.getProductDetail(id);
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductResponse> getProductDetail(@PathVariable Long productId) {
+        return productService.getProductDetail(productId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductResponse>> getProductByNameOrPrice(
+            @RequestParam(value = "productName", required = false) String productName,
+            @RequestParam(value = "price", required = false) Long price) {
+        List<ProductResponse> products = productService.getProductByNameOrPrice(productName, price);
+
+        if (products.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(productService.getProductByNameOrPrice(productName, price));
     }
 }
