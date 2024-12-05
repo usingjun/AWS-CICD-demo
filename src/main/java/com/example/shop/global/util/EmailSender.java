@@ -1,4 +1,4 @@
-package com.example.shop.global;
+package com.example.shop.global.util;
 
 import com.example.shop.global.exception.EmailCreationException;
 import com.example.shop.global.exception.EmailSendException;
@@ -20,7 +20,7 @@ public class EmailSender {
 
     private final JavaMailSender javaMailSender;
 
-    @Async
+    @Async("customTaskExecutor")
     public void sendMail(String receivedMail, String subject, String content) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
