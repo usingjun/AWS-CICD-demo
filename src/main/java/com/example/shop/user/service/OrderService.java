@@ -118,14 +118,6 @@ public class OrderService {
             order.updateTotalPrice();
         }
 
-        // 1차 캐시 동기화
-        em.flush();
-        em.clear();
-
-        // 다시 조회하여 최신 상태 가져오기
-        order = orderRepository.findByOrderNumber(orderNumber)
-                .orElseThrow(OrderNotFoundException::new);
-
         return new OrderResponse(order);
     }
 }
