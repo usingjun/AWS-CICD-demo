@@ -1,15 +1,15 @@
 package com.example.shop.admin.controller;
 
+import com.example.shop.admin.dto.AdminOrderListResponse;
+import com.example.shop.admin.dto.AdminOrderResponse;
 import com.example.shop.admin.dto.OrderDeliveryListRequest;
 import com.example.shop.admin.service.AdminOrderService;
+import com.example.shop.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/orders")
@@ -23,5 +23,18 @@ public class AdminOrderController {
     public ResponseEntity<Void> updateOrderStatusDelivery(@RequestBody @Valid OrderDeliveryListRequest orderDeliveryListRequest) {
         adminOrderService.updateOrderStatusDelivery(orderDeliveryListRequest.getOrderDeliveryRequests());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{orderNumber}")
+    public ResponseEntity<AdminOrderResponse> getOrder(@PathVariable String orderNumber) {
+        AdminOrderResponse response = adminOrderService.getOrder(orderNumber);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<PageResponse<AdminOrderListResponse>> getOrders(
+            @RequestParam(defaultValue = "1") int page
+            , @RequestParam(defaultValue = "10") int size) {
+        return null;
     }
 }

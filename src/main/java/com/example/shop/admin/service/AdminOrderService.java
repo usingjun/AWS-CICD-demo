@@ -1,6 +1,7 @@
 package com.example.shop.admin.service;
 
 import com.example.shop.admin.dao.OrderDeliveryRepository;
+import com.example.shop.admin.dto.AdminOrderResponse;
 import com.example.shop.admin.dto.OrderDeliveryRequest;
 import com.example.shop.domain.order.Order;
 import com.example.shop.domain.order.OrderRepository;
@@ -81,5 +82,13 @@ public class AdminOrderService {
     // 당일에 배송 가능 여부
     private boolean deliverableToday() {
         return LocalDateTime.now().getHour() < 14;
+    }
+
+    public AdminOrderResponse getOrder(String orderNumber) {
+
+        Order order = orderRepository.findOrderAndOrderDetailAndUserAndProductByOrderNumber(orderNumber)
+                .orElseThrow(OrderNotFoundException::new);
+
+        return new AdminOrderResponse(order);
     }
 }

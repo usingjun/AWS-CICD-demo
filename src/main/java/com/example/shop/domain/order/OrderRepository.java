@@ -14,12 +14,17 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByOrderNumber(String orderNumber);
 
     Page<Order> findByUserId(Long userId, Pageable pageable);
-  
+
     @Query("select o from Order o" +
             " join fetch o.orderDetails od" +
             " join fetch od.product" +
             " where o.orderNumber = :orderNumber")
     Optional<Order> findOrderAndOrderDetailAndProductByOrderNumber(String orderNumber);
 
-
+    @Query("select o from Order o" +
+            " join fetch o.orderDetails od" +
+            " join fetch o.user" +
+            " join fetch od.product" +
+            " where o.orderNumber = :orderNumber")
+    Optional<Order> findOrderAndOrderDetailAndUserAndProductByOrderNumber(String orderNumber);
 }
