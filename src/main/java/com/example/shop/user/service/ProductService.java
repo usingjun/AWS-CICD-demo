@@ -1,5 +1,8 @@
 package com.example.shop.user.service;
 
+import com.example.shop.global.exception.ProductIdNotFoundException;
+import com.example.shop.global.exception.ProductSearchEmptyException;
+import com.example.shop.global.exception.ProductsEmptyException;
 import com.example.shop.user.dao.UserDao;
 import com.example.shop.user.dto.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +23,19 @@ public class ProductService {
     }
 
     public List<ProductResponse> getAllProducts() {
-        return userDao.getAllProducts();
+        List<ProductResponse> products = userDao.getAllProducts();
+        if (products.isEmpty()) {
+            throw new ProductsEmptyException();
+        }
+        return products;
     }
 
-    public Optional<ProductResponse> getProductDetail(Long productId) {
-        return Optional.ofNullable(userDao.getProductDetail(productId));
+    public ProductResponse getProductDetail(Long productId) {
+        ProductResponse product = userDao.getProductDetail(productId);
+        if (product == null) {
+            throw new ProductIdNotFoundException();
+        }
+        return product;
     }
 
     public List<ProductResponse> getProductByNameOrPrice(String productName, Long price) {
@@ -36,6 +47,10 @@ public class ProductService {
         params.put("productName", productName);
         params.put("price", price);
 
-        return userDao.getProductByNameOrPrice(params);
+        List<ProductResponse> products = userDao.getProductByNameOrPrice(params);
+        if (products.isEmpty()) {
+            throw new ProductSearchEmptyException();
+        }
+        return products;
     }
 }

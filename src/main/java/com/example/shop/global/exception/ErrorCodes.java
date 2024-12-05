@@ -33,7 +33,13 @@ public enum ErrorCodes {
 
     // Email 관련 에러
     EMAIL_FORM_CREATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 템플릿 생성 중 오류가 발생했습니다."),
-    EMAIL_SEND_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "Email 서버에 문제가 발생하였습니다.");
+    EMAIL_SEND_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "Email 서버에 문제가 발생하였습니다."),
+
+    // 메뉴 조회 관련 에러
+    PRODUCTS_EMPTY(HttpStatus.NOT_FOUND, "상품이 존재하지 않습니다."),
+    PRODUCTID_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다."),
+    PRODUCTS_SEARCH_EMPTY(HttpStatus.NO_CONTENT, "조건에 맞는 상품이 없습니다.");
+
 
     private String message;
     private HttpStatus status;

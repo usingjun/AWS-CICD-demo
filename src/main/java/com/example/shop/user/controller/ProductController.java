@@ -25,20 +25,13 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductResponse> getProductDetail(@PathVariable Long productId) {
-        return productService.getProductDetail(productId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(productService.getProductDetail(productId));
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<ProductResponse>> getProductByNameOrPrice(
             @RequestParam(value = "productName", required = false) String productName,
             @RequestParam(value = "price", required = false) Long price) {
-        List<ProductResponse> products = productService.getProductByNameOrPrice(productName, price);
-
-        if (products.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
         return ResponseEntity.ok(productService.getProductByNameOrPrice(productName, price));
     }
 }
