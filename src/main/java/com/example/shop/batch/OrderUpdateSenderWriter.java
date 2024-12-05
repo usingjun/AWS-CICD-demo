@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKey;
+import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKeyYesterday;
 
 @Slf4j
 @Component
@@ -41,7 +41,7 @@ public class OrderUpdateSenderWriter implements ItemWriter<OrderDeliveryRequest>
 
         } finally {
             orderDeliveryRequestList.forEach(orderAdminService::sendDeliveryAlertEmail);
-            orderDeliveryRepository.removeOrderEmail(getOrderKey(), orderDeliveryRequestList.toArray());
+            orderDeliveryRepository.removeOrderEmail(getOrderKeyYesterday(), orderDeliveryRequestList.toArray());
         }
     }
 }

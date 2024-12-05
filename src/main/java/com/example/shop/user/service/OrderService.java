@@ -120,6 +120,9 @@ public class OrderService {
 
             // 총 금액 재계산
             order.updateTotalPrice();
+
+            // 캐싱된 주문 수정
+            orderAdminService.updateCachingOrder(user.getEmail(), order.getId());
         }
 
         return new OrderResponse(order);

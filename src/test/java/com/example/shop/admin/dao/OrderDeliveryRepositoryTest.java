@@ -9,10 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
+import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKeyYesterday;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -21,7 +20,7 @@ class OrderDeliveryRepositoryTest {
     @Autowired
     private OrderDeliveryRepository orderDeliveryRepository;
 
-    private final String key = "orders:" + LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_LOCAL_DATE);
+    private final String key = getOrderKeyYesterday();
 
     @BeforeEach
     void setup() {
@@ -84,5 +83,15 @@ class OrderDeliveryRepositoryTest {
 
         // then
         assertThat(orderDeliveryRepository.findAllOrder(key)).isEmpty();
+    }
+
+    @DisplayName("existOrder 메서드 테스트")
+    @Test
+    void existOrder() {
+        // given
+        OrderDeliveryRequest request = new OrderDeliveryRequest("test50@test.com", 5100L);
+
+        // when & then
+        assertThat(orderDeliveryRepository.existOrder(key, request)).isTrue();
     }
 }
