@@ -35,7 +35,6 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
     private final CartDetailRepository cartDetailRepository;
-    private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailCodeRepository emailCodeRepository;
     private final EmailSender emailSender;
@@ -60,11 +59,11 @@ public class AuthService {
 
     @Transactional
     public void deleteUser(SignInRequest signInRequest) {
-        Long userId = validateSignInInfos(signInRequest.getEmail(), signInRequest.getPassword());
+        User user = validateSignInInfos(signInRequest.getEmail(), signInRequest.getPassword());
 
-        validateAndDeleteUserDependencies(userId);
-        userRepository.deleteById(userId);
-        refreshTokenRepository.deleteById(userId);
+        cartDetailRepository.deleteAllByUserId(user.getId());
+        user.deactivateUser();
+        refreshTokenRepository.deleteById(user.getId());
     }
 
     public void logOut(String bearerToken) {
@@ -72,13 +71,6 @@ public class AuthService {
         blackListRepository.save(accessToken, jwtProvider.getExpiration(accessToken));
         refreshTokenRepository.deleteById(getCurrentUser().getId());
     }
-
-    private void validateAndDeleteUserDependencies(Long userId) {
-        cartDetailRepository.deleteAllByUserId(userId);
-        if(orderRepository.existsByUserIdAndOrderStatus(userId, OrderStatus.PAID)) throw new UndeliveredOrderExistsException();
-        orderRepository.deleteByUserId(userId);
-    }
-
 
     private Authentication setAuthentication(String email, String password) {
         UsernamePasswordAuthenticationToken usernamePasswordAuth = new UsernamePasswordAuthenticationToken(email, password);
@@ -144,11 +136,10 @@ public class AuthService {
         refreshTokenRepository.findByMemberId(memberId).orElseThrow(RefreshTokenExpiredException::new);
     }
 
-    private Long validateSignInInfos(String email, String password) {
+    private User validateSignInInfos(String email, String password) {
         User user = getCurrentUser();
-        if(user.getEmail().equals(email) && passwordEncoder.matches(password,user.getPassword())) return user.getId();
+        if(user.getEmail().equals(email) && passwordEncoder.matches(password,user.getPassword())) return user;
         else throw new LogInNotMatchException();
     }
-
 
 }
