@@ -38,7 +38,8 @@ public enum ErrorCodes {
     // 메뉴 조회 관련 에러
     PRODUCTS_EMPTY(HttpStatus.NOT_FOUND, "상품이 존재하지 않습니다."),
     PRODUCTID_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다."),
-    PRODUCTS_SEARCH_EMPTY(HttpStatus.NO_CONTENT, "조건에 맞는 상품이 없습니다.");
+    PRODUCTS_SEARCH_EMPTY(HttpStatus.NOT_FOUND, "조건에 맞는 상품이 없습니다."),
+    PRODUCTS_SEARCH_BY_ONE_LETTER(HttpStatus.BAD_REQUEST, "상품 이름은 한 글자로 검색할 수 없습니다.");
 
 
     private String message;
