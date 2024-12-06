@@ -7,11 +7,13 @@ import com.example.shop.admin.dto.OrderSearchRequest;
 import com.example.shop.admin.service.AdminOrderService;
 import com.example.shop.common.dto.PageResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name="Admin Order")
 @RestController
 @RequestMapping("/api/admin/orders")
 @RequiredArgsConstructor
