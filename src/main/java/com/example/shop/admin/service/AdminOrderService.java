@@ -51,13 +51,7 @@ public class AdminOrderService {
             order.changeStatus(OrderStatus.SHIPPING);
 
             // 캐싱된 배송 대기 주문 데이터 삭제
-            String key = getOrderKeyToday();
-            boolean isExist = orderDeliveryRepository.existOrder(key, orderRequest);
-            if (isExist) {
-                orderDeliveryRepository.removeOrderEmail(key, orderRequest);
-            } else {
-                orderDeliveryRepository.removeOrderEmail(getOrderKeyYesterday(), orderRequest);
-            }
+            removeCachingOrder(orderRequest);
         });
 
         // 배송 알림 이메일 보내기
@@ -74,6 +68,22 @@ public class AdminOrderService {
         if (!deliverableToday() && orderDeliveryRepository.existOrder(key, cachedOrder)) {
             orderDeliveryRepository.removeOrderEmail(key, cachedOrder);
             orderDeliveryRepository.addOrderEmail(getCachingDeliveryOrderKey(), cachedOrder);
+        }
+    }
+
+    public void cancelCachingOrder(String email, Long orderId) {
+        OrderDeliveryRequest cachedOrder = new OrderDeliveryRequest(email, orderId);
+        removeCachingOrder(cachedOrder);
+    }
+    
+    // 캐싱된 주문 데이터 Redis에서 삭제
+    private void removeCachingOrder(OrderDeliveryRequest cachedOrder) {
+        String key = getOrderKeyYesterday();
+
+        if (orderDeliveryRepository.existOrder(key, cachedOrder)) {
+            orderDeliveryRepository.removeOrderEmail(key, cachedOrder);
+        } else {
+            orderDeliveryRepository.removeOrderEmail(getOrderKeyToday(), cachedOrder);
         }
     }
 
