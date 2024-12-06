@@ -67,7 +67,7 @@ public class AuthService {
 
     private void validateAndDeleteUserDependencies(Long userId) {
         cartDetailRepository.deleteAllByUserId(userId);
-        if(orderRepository.existsByOrderStatus(OrderStatus.PAID)) throw new UndeliveredOrderExistsException();
+        if(orderRepository.existsByUserIdAndOrderStatus(userId, OrderStatus.PAID)) throw new UndeliveredOrderExistsException();
         orderRepository.deleteByUserId(userId);
     }
 

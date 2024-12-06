@@ -28,6 +28,6 @@ public interface OrderRepository extends JpaRepository<Order, Long>, OrderReposi
             " where o.orderNumber = :orderNumber")
     Optional<Order> findOrderAndOrderDetailAndUserAndProductByOrderNumber(String orderNumber);
 
-    boolean existsByOrderStatus(OrderStatus orderStatus);
+    boolean existsByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus);
     void deleteByUserId(Long userId);
 }
