@@ -37,8 +37,10 @@ public class User extends BaseEntity {
     private Role userRole;
 
     @OneToMany(mappedBy = "user")
+    @Builder.Default
     private List<CartDetail> cartDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 }

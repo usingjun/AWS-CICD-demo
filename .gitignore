@@ -40,3 +40,9 @@ out/
 **/resources/*.properties
 
 .DS_Store
+
+### redis directory ###
+redis/
+
+### QueryDSL QClass ###
+**/generated/
