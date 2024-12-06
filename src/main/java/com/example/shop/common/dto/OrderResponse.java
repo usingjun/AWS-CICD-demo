@@ -1,4 +1,4 @@
-package com.example.shop.user.dto;
+package com.example.shop.common.dto;
 
 import com.example.shop.domain.order.DeliveryInfo;
 import com.example.shop.domain.order.Order;
