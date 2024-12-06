@@ -8,7 +8,9 @@ import java.util.Map;
 
 @Mapper
 public interface UserMapper {
-    List<ProductResponse> getAllProducts();
+    Long countProducts();
+    List<ProductResponse> getAllProducts(Map<String, Object> params);
+    List<ProductResponse> getAllProductsWithoutPaging();
     ProductResponse getProductDetail(Long productId);
     List<ProductResponse> getProductByNameOrPrice(Map<String, Object> params);
 }

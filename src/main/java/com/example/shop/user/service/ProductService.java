@@ -1,17 +1,20 @@
 package com.example.shop.user.service;
 
+import com.example.shop.common.dto.PageResponse;
 import com.example.shop.global.exception.ProductIdNotFoundException;
 import com.example.shop.global.exception.ProductSearchEmptyException;
 import com.example.shop.global.exception.ProductsEmptyException;
 import com.example.shop.user.dao.UserDao;
 import com.example.shop.user.dto.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -22,12 +25,14 @@ public class ProductService {
         this.userDao = userDao;
     }
 
-    public List<ProductResponse> getAllProducts() {
-        List<ProductResponse> products = userDao.getAllProducts();
+    public PageResponse<ProductResponse> getAllProducts(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<ProductResponse> products = userDao.getAllProducts(pageable);
+
         if (products.isEmpty()) {
             throw new ProductsEmptyException();
         }
-        return products;
+        return new PageResponse<>(products);
     }
 
     public ProductResponse getProductDetail(Long productId) {
@@ -40,7 +45,12 @@ public class ProductService {
 
     public List<ProductResponse> getProductByNameOrPrice(String productName, Long price) {
         if (productName == null && price == null) {
-            return userDao.getAllProducts();
+            Page<ProductResponse> allProducts = userDao.getAllProducts(Pageable.unpaged());
+
+            if (allProducts.isEmpty()) {
+                throw new ProductsEmptyException();
+            }
+            return allProducts.getContent();
         }
 
         Map<String, Object> params = new HashMap<>();
