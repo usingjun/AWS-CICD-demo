@@ -65,9 +65,9 @@ public class AdminOrderService {
     public void updateCachingOrder(String email, Long orderId) {
         OrderDeliveryRequest cachedOrder = new OrderDeliveryRequest(email, orderId);
         String key = getOrderKeyYesterday();
-        if (!deliverableToday() && orderDeliveryRepository.existOrder(key, cachedOrder)) {
+        if (deliverableToday() && orderDeliveryRepository.existOrder(key, cachedOrder)) {
             orderDeliveryRepository.removeOrderEmail(key, cachedOrder);
-            orderDeliveryRepository.addOrderEmail(getCachingDeliveryOrderKey(), cachedOrder);
+            orderDeliveryRepository.addOrderEmail(getOrderKeyToday(), cachedOrder);
         }
     }
 
