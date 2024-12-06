@@ -2,6 +2,7 @@ package com.example.shop.auth.dto;
 
 import com.example.shop.domain.user.Role;
 import com.example.shop.domain.user.User;
+import com.example.shop.domain.user.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class SignUpRequest {
                 .password(password)
                 .userName(name)
                 .userRole(role)
+                .userStatus(UserStatus.ACTIVE)
                 .build();
     }
 }

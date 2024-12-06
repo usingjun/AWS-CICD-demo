@@ -89,5 +89,8 @@ public class JwtProvider {
             throw new MalformedJwtException("잘못된 형식의 토큰입니다");
         }
     }
+    public Long getExpiration(String bearerToken) {
+        return parseClaims(bearerToken).getExpiration().getTime()-(new Date()).getTime();
+    }
 
 }

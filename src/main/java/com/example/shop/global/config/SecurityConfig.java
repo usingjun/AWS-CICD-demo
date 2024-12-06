@@ -1,5 +1,6 @@
 package com.example.shop.global.config;
 
+import com.example.shop.auth.repository.BlackListRepository;
 import com.example.shop.auth.repository.RefreshTokenRepository;
 import com.example.shop.global.config.auth.JwtAuthenticationEntryPoint;
 import com.example.shop.global.config.auth.JwtAuthenticationFilter;
@@ -19,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig  {
 
     private final JwtProvider jwtProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final BlackListRepository blackListRepository;
 
 
     private final String[] WHITE_LIST = new String[]{
@@ -51,7 +52,7 @@ public class SecurityConfig  {
                                 .anyRequest().authenticated())
                 .exceptionHandling((exception) ->
                         exception.authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, blackListRepository), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

@@ -15,6 +15,8 @@ public enum ErrorCodes {
     LOG_IN_NOT_MATCH(HttpStatus.BAD_REQUEST, "로그인 정보가 일치하지 않습니다"),
     REFRESH_TOKEN_EXPIRED(HttpStatus.BAD_REQUEST,"리프레시 토큰이 만료되었습니다. 다시 로그인해주세요"),
     NO_AUTHENTICATION(HttpStatus.UNAUTHORIZED, "인증 정보가 존재하지 않습니다"),
+    UNDELIVERED_ORDER_EXISTS(HttpStatus.BAD_REQUEST,"배송 완료되지 않은 주문이 존재합니다. 배송 완료 후 탈퇴 해 주세요"),
+    LOG_OUT_TOKEN(HttpStatus.BAD_REQUEST,"로그아웃 된 토큰입니다"),
 
     // 장바구니 관련
     INVALID_CART_QUANTITY(HttpStatus.BAD_REQUEST, "수량은 1개 이상이어야 합니다."),
