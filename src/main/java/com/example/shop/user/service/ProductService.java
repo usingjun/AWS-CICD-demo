@@ -4,6 +4,7 @@ import com.example.shop.common.dto.PageResponse;
 import com.example.shop.global.exception.ProductIdNotFoundException;
 import com.example.shop.global.exception.ProductSearchEmptyException;
 import com.example.shop.global.exception.ProductsEmptyException;
+import com.example.shop.global.exception.ProductsSearchByOneLetterException;
 import com.example.shop.user.dao.UserDao;
 import com.example.shop.user.dto.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,20 +45,20 @@ public class ProductService {
     }
 
     public List<ProductResponse> getProductByNameOrPrice(String productName, Long price) {
-        if (productName == null && price == null) {
-            Page<ProductResponse> allProducts = userDao.getAllProducts(Pageable.unpaged());
-
-            if (allProducts.isEmpty()) {
-                throw new ProductsEmptyException();
-            }
-            return allProducts.getContent();
+        if (productName != null && productName.length() < 2) {
+            throw new ProductsSearchByOneLetterException();
         }
 
         Map<String, Object> params = new HashMap<>();
-        params.put("productName", productName);
-        params.put("price", price);
+        if (productName != null) {
+            params.put("productName", productName);
+        }
+        if (price != null) {
+            params.put("price", price);
+        }
 
         List<ProductResponse> products = userDao.getProductByNameOrPrice(params);
+
         if (products.isEmpty()) {
             throw new ProductSearchEmptyException();
         }

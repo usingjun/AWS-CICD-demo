@@ -20,7 +20,7 @@
         limit #{offset}, #{pageSize}
     </select>
 
-    <select id="getProductDetail" parameterType="Long" resultType="productResponse">
+    <select id="getProductDetail" parameterType="Long" resultType="productDetailResponse">
         select product_id, product_name, price, description, image
         from products
         where product_id = #{product_id}
@@ -30,11 +30,11 @@
         select product_id, product_name, price, image
         from products
         <where>
-            <if test="product_name != null and product_name != ''">
-                product_name like concat('%', #{product_name}, '%')
+            <if test="productName != null and productName != ''">
+                product_name like concat('%', #{productName}, '%')
             </if>
             <if test="price != null">
-                <if test="product_name != null and product_name != ''">
+                <if test="productName != null and productName != ''">
                     and
                 </if>
                 price &lt;= #{price}

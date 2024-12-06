@@ -3,17 +3,17 @@ package com.example.shop.user.dto;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 @Getter
-@RequiredArgsConstructor
+@Setter
 @Alias(value = "productResponse")
 public class ProductResponse {
 
-    @NonNull private Long productId;
-    @NonNull private String productName;
-    @NonNull private Long price;
-    private String description;
-    @NonNull private String image;
+    private Long productId;
+    private String productName;
+    private Long price;
+    private String image;
 
 }
