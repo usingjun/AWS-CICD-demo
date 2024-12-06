@@ -25,7 +25,7 @@ class OrderDeliveryRepositoryTest {
     @BeforeEach
     void setup() {
         for (Long i = 0L; i < 150; i++) {
-            OrderDeliveryRequest order = new OrderDeliveryRequest("test%s@test.com".formatted(i), i*102);
+            OrderDeliveryRequest order = new OrderDeliveryRequest("test%s@test.com".formatted(i), i+"test");
 
             orderDeliveryRepository.addOrderEmail(key, order);
         }
@@ -40,7 +40,7 @@ class OrderDeliveryRepositoryTest {
     @Test
     void addOrderEmail() {
         // given
-        OrderDeliveryRequest request = new OrderDeliveryRequest("testtest@test.com", 999999L);
+        OrderDeliveryRequest request = new OrderDeliveryRequest("testtest@test.com", "99999test");
         // when
         Long addCount = orderDeliveryRepository.addOrderEmail(key, request);
 
@@ -89,7 +89,7 @@ class OrderDeliveryRepositoryTest {
     @Test
     void existOrder() {
         // given
-        OrderDeliveryRequest request = new OrderDeliveryRequest("test50@test.com", 5100L);
+        OrderDeliveryRequest request = new OrderDeliveryRequest("test50@test.com", "50test");
 
         // when & then
         assertThat(orderDeliveryRepository.existOrder(key, request)).isTrue();

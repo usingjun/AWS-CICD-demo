@@ -45,7 +45,7 @@ public class AdminOrderService {
     @Transactional
     public void updateOrderStatusDelivery(List<OrderDeliveryRequest> orderDeliveryList) {
         orderDeliveryList.forEach(orderRequest -> {
-            Order order = orderRepository.findById(orderRequest.getOrderId())
+            Order order = orderRepository.findByOrderNumber(orderRequest.getOrderNumber())
                     .orElseThrow(OrderNotFoundException::new);
 
             order.changeStatus(OrderStatus.SHIPPING);
@@ -58,12 +58,12 @@ public class AdminOrderService {
         orderDeliveryList.forEach(this::sendDeliveryAlertEmail);
     }
 
-    public void cachingDeliveryOrder(String email, Long orderId) {
-        orderDeliveryRepository.addOrderEmail(getCachingDeliveryOrderKey(), new OrderDeliveryRequest(email, orderId));
+    public void cachingDeliveryOrder(String email, String orderNumber) {
+        orderDeliveryRepository.addOrderEmail(getCachingDeliveryOrderKey(), new OrderDeliveryRequest(email, orderNumber));
     }
 
-    public void updateCachingOrder(String email, Long orderId) {
-        OrderDeliveryRequest cachedOrder = new OrderDeliveryRequest(email, orderId);
+    public void updateCachingOrder(String email, String orderNumber) {
+        OrderDeliveryRequest cachedOrder = new OrderDeliveryRequest(email, orderNumber);
         String key = getOrderKeyYesterday();
         if (deliverableToday() && orderDeliveryRepository.existOrder(key, cachedOrder)) {
             orderDeliveryRepository.removeOrderEmail(key, cachedOrder);
@@ -71,8 +71,8 @@ public class AdminOrderService {
         }
     }
 
-    public void cancelCachingOrder(String email, Long orderId) {
-        OrderDeliveryRequest cachedOrder = new OrderDeliveryRequest(email, orderId);
+    public void cancelCachingOrder(String email, String orderNumber) {
+        OrderDeliveryRequest cachedOrder = new OrderDeliveryRequest(email, orderNumber);
         removeCachingOrder(cachedOrder);
     }
     

@@ -16,11 +16,11 @@ class OrderDeliveryUtilTest {
     @Test
     void orderDeliveryTemplateTest() {
         // given
-        OrderDeliveryRequest order = new OrderDeliveryRequest("aaaaaaa@aaaa.com", 13L);
+        OrderDeliveryRequest order = new OrderDeliveryRequest("aaaaaaa@aaaa.com", "주문 번호 test");
         String orderDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
 
         // when & then
         assertThat(orderDeliveryTemplate(order))
-                .contains(order.getOrderId().toString(), orderDate);
+                .contains(order.getOrderNumber(), orderDate);
     }
 }
