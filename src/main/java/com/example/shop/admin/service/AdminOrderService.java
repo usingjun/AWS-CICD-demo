@@ -45,35 +45,45 @@ public class AdminOrderService {
     @Transactional
     public void updateOrderStatusDelivery(List<OrderDeliveryRequest> orderDeliveryList) {
         orderDeliveryList.forEach(orderRequest -> {
-            Order order = orderRepository.findById(orderRequest.getOrderId())
+            Order order = orderRepository.findByOrderNumber(orderRequest.getOrderNumber())
                     .orElseThrow(OrderNotFoundException::new);
 
             order.changeStatus(OrderStatus.SHIPPING);
 
             // 캐싱된 배송 대기 주문 데이터 삭제
-            String key = getOrderKeyToday();
-            boolean isExist = orderDeliveryRepository.existOrder(key, orderRequest);
-            if (isExist) {
-                orderDeliveryRepository.removeOrderEmail(key, orderRequest);
-            } else {
-                orderDeliveryRepository.removeOrderEmail(getOrderKeyYesterday(), orderRequest);
-            }
+            removeCachingOrder(orderRequest);
         });
 
         // 배송 알림 이메일 보내기
         orderDeliveryList.forEach(this::sendDeliveryAlertEmail);
     }
 
-    public void cachingDeliveryOrder(String email, Long orderId) {
-        orderDeliveryRepository.addOrderEmail(getCachingDeliveryOrderKey(), new OrderDeliveryRequest(email, orderId));
+    public void cachingDeliveryOrder(String email, String orderNumber) {
+        orderDeliveryRepository.addOrderEmail(getCachingDeliveryOrderKey(), new OrderDeliveryRequest(email, orderNumber));
     }
 
-    public void updateCachingOrder(String email, Long orderId) {
-        OrderDeliveryRequest cachedOrder = new OrderDeliveryRequest(email, orderId);
+    public void updateCachingOrder(String email, String orderNumber) {
+        OrderDeliveryRequest cachedOrder = new OrderDeliveryRequest(email, orderNumber);
         String key = getOrderKeyYesterday();
-        if (!deliverableToday() && orderDeliveryRepository.existOrder(key, cachedOrder)) {
+        if (deliverableToday() && orderDeliveryRepository.existOrder(key, cachedOrder)) {
             orderDeliveryRepository.removeOrderEmail(key, cachedOrder);
-            orderDeliveryRepository.addOrderEmail(getCachingDeliveryOrderKey(), cachedOrder);
+            orderDeliveryRepository.addOrderEmail(getOrderKeyToday(), cachedOrder);
+        }
+    }
+
+    public void cancelCachingOrder(String email, String orderNumber) {
+        OrderDeliveryRequest cachedOrder = new OrderDeliveryRequest(email, orderNumber);
+        removeCachingOrder(cachedOrder);
+    }
+    
+    // 캐싱된 주문 데이터 Redis에서 삭제
+    private void removeCachingOrder(OrderDeliveryRequest cachedOrder) {
+        String key = getOrderKeyYesterday();
+
+        if (orderDeliveryRepository.existOrder(key, cachedOrder)) {
+            orderDeliveryRepository.removeOrderEmail(key, cachedOrder);
+        } else {
+            orderDeliveryRepository.removeOrderEmail(getOrderKeyToday(), cachedOrder);
         }
     }
 

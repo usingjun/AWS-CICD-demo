@@ -53,9 +53,9 @@ class OrderUpdateSenderWriterTest {
 
         user = userRepository.save(user);
 
-        for (long i = 335; i <= 568; i++) {
+        for (long i = 1; i <= 532; i++) {
             orderDeliveryRepository.addOrderEmail(getOrderKeyYesterday(),
-                    new OrderDeliveryRequest(user.getEmail(), i));
+                    new OrderDeliveryRequest(user.getEmail(), i+"test"));
         }
     }
 
@@ -75,7 +75,7 @@ class OrderUpdateSenderWriterTest {
         }
 
         SoftAssertions.assertSoftly(softAssertions -> {
-            Order order = orderRepository.findById(orderDeliveryRequestList.get(2).getOrderId())
+            Order order = orderRepository.findByOrderNumber(orderDeliveryRequestList.get(2).getOrderNumber())
                             .orElseThrow(NullPointerException::new);
 
             softAssertions.assertThat(order.getOrderStatus())

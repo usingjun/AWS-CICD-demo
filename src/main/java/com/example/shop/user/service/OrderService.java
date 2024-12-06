@@ -1,6 +1,8 @@
 package com.example.shop.user.service;
 
 import com.example.shop.admin.service.AdminOrderService;
+import com.example.shop.common.dto.OrderListResponse;
+import com.example.shop.common.dto.OrderResponse;
 import com.example.shop.common.dto.PageResponse;
 import com.example.shop.domain.cart.CartDetail;
 import com.example.shop.domain.cart.CartDetailRepository;
@@ -12,10 +14,7 @@ import com.example.shop.domain.user.UserRepository;
 import com.example.shop.global.exception.*;
 import com.example.shop.global.util.SecurityUtil;
 import com.example.shop.user.dto.CreateOrderRequest;
-import com.example.shop.common.dto.OrderListResponse;
-import com.example.shop.common.dto.OrderResponse;
 import com.example.shop.user.dto.UpdateOrderRequest;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -76,7 +75,7 @@ public class OrderService {
         Order createdOrder = orderRepository.save(order);
         cartDetailRepository.deleteAllByUserId(user.getId());
       
-        adminOrderService.cachingDeliveryOrder(user.getEmail(), order.getId());
+        adminOrderService.cachingDeliveryOrder(user.getEmail(), order.getOrderNumber());
 
         return new OrderResponse(order);
     }
@@ -123,7 +122,7 @@ public class OrderService {
             order.updateTotalPrice();
 
             // 캐싱된 주문 수정
-            adminOrderService.updateCachingOrder(user.getEmail(), order.getId());
+            adminOrderService.updateCachingOrder(user.getEmail(), order.getOrderNumber());
         }
 
         return new OrderResponse(order);
@@ -183,6 +182,9 @@ public class OrderService {
 
         // 주문 취소 상태로 변경
         order.changeStatus(OrderStatus.CANCELLED);
+
+        // 캐싱된 주문 데이터 삭제
+        adminOrderService.cancelCachingOrder(user.getEmail(), order.getOrderNumber());
 
         return new OrderResponse(order);
     }

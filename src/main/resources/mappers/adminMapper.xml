@@ -5,7 +5,7 @@
 
     <!-- 데이터 업데이트 -->
     <update id="updateProduct" parameterType="ProductUpdateRequest">
-        update product
+        update products
         set quantity=#{quantity}, price=#{price}, image=#{image}, description=#{description}, updated_at=Now()
         where product_Id=#{productId}
     </update>
@@ -40,7 +40,7 @@
     <update id="updateOrderDelivery" parameterType="OrderDeliveryRequest">
         update orders
         set order_status = 'SHIPPING' , updated_at = now()
-        where order_id = #{orderId}
+        where order_number = #{orderNumber}
     </update>
 
 </mapper>
