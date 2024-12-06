@@ -75,7 +75,7 @@ public class OrderService {
         Order createdOrder = orderRepository.save(order);
         cartDetailRepository.deleteAllByUserId(user.getId());
       
-        adminOrderService.cachingDeliveryOrder(user.getEmail(), order.getId());
+        adminOrderService.cachingDeliveryOrder(user.getEmail(), order.getOrderNumber());
 
         return new OrderResponse(order);
     }
@@ -122,7 +122,7 @@ public class OrderService {
             order.updateTotalPrice();
 
             // 캐싱된 주문 수정
-            adminOrderService.updateCachingOrder(user.getEmail(), order.getId());
+            adminOrderService.updateCachingOrder(user.getEmail(), order.getOrderNumber());
         }
 
         return new OrderResponse(order);
@@ -184,7 +184,7 @@ public class OrderService {
         order.changeStatus(OrderStatus.CANCELLED);
 
         // 캐싱된 주문 데이터 삭제
-        adminOrderService.cancelCachingOrder(user.getEmail(), order.getId());
+        adminOrderService.cancelCachingOrder(user.getEmail(), order.getOrderNumber());
 
         return new OrderResponse(order);
     }

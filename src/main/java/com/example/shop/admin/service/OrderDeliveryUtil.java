@@ -14,11 +14,11 @@ public final class OrderDeliveryUtil {
             DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
 
     static String orderDeliveryTemplate(OrderDeliveryRequest order) {
-        String orderId = order.getOrderId().toString();
+        String orderNumber = order.getOrderNumber();
         String deliveryDate = LocalDate.now().format(KOREAN_DATE_FORMATTER);
 
         Context context = new Context();
-        context.setVariable("orderId", orderId);
+        context.setVariable("orderNumber", orderNumber);
         context.setVariable("deliveryDate", deliveryDate);
         return templateEngine.process("delivery-email", context);
     }
