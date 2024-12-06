@@ -4,10 +4,7 @@ import com.example.shop.admin.service.AdminOrderService;
 import com.example.shop.common.dto.PageResponse;
 import com.example.shop.domain.cart.CartDetail;
 import com.example.shop.domain.cart.CartDetailRepository;
-import com.example.shop.domain.order.DeliveryInfo;
-import com.example.shop.domain.order.Order;
-import com.example.shop.domain.order.OrderDetail;
-import com.example.shop.domain.order.OrderRepository;
+import com.example.shop.domain.order.*;
 import com.example.shop.domain.product.Product;
 import com.example.shop.domain.product.ProductRepository;
 import com.example.shop.domain.user.User;
@@ -32,7 +29,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final EntityManager em;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final CartDetailRepository cartDetailRepository;
@@ -157,5 +153,37 @@ public class OrderService {
         Page<OrderListResponse> orderListResponse = orders.map(OrderListResponse::new);
 
         return new PageResponse<>(orderListResponse);
+    }
+
+    @Transactional
+    public OrderResponse cancelOrder(String orderNumber) {
+        // 유저 조회
+        User user = getCurrentUser();
+
+        Order order = orderRepository.findOrderAndOrderDetailByOrderNumber(orderNumber)
+                .orElseThrow(OrderNotFoundException::new);
+
+        // 주문자 본인 확인
+        if (!order.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedOrderAccessException();
+        }
+
+        // 주문 상태 확인
+        order.verifyUpdatable();
+
+        // 재고 관련 수정
+        for (OrderDetail orderDetail : order.getOrderDetails()) {
+            // 비관적 락으로 재고 조회
+            Product product = productRepository.findByIdWithPessimisticLock(orderDetail.getProduct().getId())
+                    .orElseThrow(ProductNotFoundException::new);
+
+            // 재고 증가
+            product.increaseQuantity(orderDetail.getQuantity());
+        }
+
+        // 주문 취소 상태로 변경
+        order.changeStatus(OrderStatus.CANCELLED);
+
+        return new OrderResponse(order);
     }
 }
