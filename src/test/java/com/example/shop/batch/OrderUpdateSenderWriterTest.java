@@ -3,7 +3,7 @@ package com.example.shop.batch;
 import com.example.shop.admin.dao.OrderDeliveryRepository;
 import com.example.shop.admin.dto.OrderDeliveryRequest;
 import com.example.shop.admin.mapper.AdminMapper;
-import com.example.shop.admin.service.OrderAdminService;
+import com.example.shop.admin.service.AdminOrderService;
 import com.example.shop.domain.order.Order;
 import com.example.shop.domain.order.OrderRepository;
 import com.example.shop.domain.order.OrderStatus;
@@ -24,14 +24,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKey;
+import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKeyYesterday;
 
 @Transactional
 @SpringBootTest
 class OrderUpdateSenderWriterTest {
 
     @Autowired
-    private OrderAdminService orderAdminService;
+    private AdminOrderService adminOrderService;
     @Autowired
     private OrderDeliveryRepository orderDeliveryRepository;
     @Autowired
@@ -54,7 +54,7 @@ class OrderUpdateSenderWriterTest {
         user = userRepository.save(user);
 
         for (long i = 335; i <= 568; i++) {
-            orderDeliveryRepository.addOrderEmail(getOrderKey(),
+            orderDeliveryRepository.addOrderEmail(getOrderKeyYesterday(),
                     new OrderDeliveryRequest(user.getEmail(), i));
         }
     }
@@ -62,7 +62,7 @@ class OrderUpdateSenderWriterTest {
     @DisplayName("주문 상태값 배송으로 변경 시, Mybatis로 Batch 작업")
     @Test
     void write() {
-        List<OrderDeliveryRequest> orderDeliveryRequestList = orderDeliveryRepository.findAllOrder(getOrderKey()).stream().toList();
+        List<OrderDeliveryRequest> orderDeliveryRequestList = orderDeliveryRepository.findAllOrder(getOrderKeyYesterday()).stream().toList();
         try (SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH)) {
             AdminMapper adminMapper = sqlSession.getMapper(AdminMapper.class);
 
@@ -70,8 +70,8 @@ class OrderUpdateSenderWriterTest {
             sqlSession.flushStatements();
 
         } finally {
-            orderDeliveryRequestList.forEach(orderAdminService::sendDeliveryAlertEmail);
-            orderDeliveryRepository.removeOrderEmail(getOrderKey(), orderDeliveryRequestList.toArray());
+            orderDeliveryRequestList.forEach(adminOrderService::sendDeliveryAlertEmail);
+            orderDeliveryRepository.removeOrderEmail(getOrderKeyYesterday(), orderDeliveryRequestList.toArray());
         }
 
         SoftAssertions.assertSoftly(softAssertions -> {

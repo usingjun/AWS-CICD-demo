@@ -1,6 +1,7 @@
 package com.example.shop.user.service;
 
-import com.example.shop.admin.service.OrderAdminService;
+import com.example.shop.admin.service.AdminOrderService;
+import com.example.shop.common.dto.PageResponse;
 import com.example.shop.domain.cart.CartDetail;
 import com.example.shop.domain.cart.CartDetailRepository;
 import com.example.shop.domain.order.DeliveryInfo;
@@ -14,10 +15,14 @@ import com.example.shop.domain.user.UserRepository;
 import com.example.shop.global.exception.*;
 import com.example.shop.global.util.SecurityUtil;
 import com.example.shop.user.dto.CreateOrderRequest;
+import com.example.shop.user.dto.OrderListResponse;
 import com.example.shop.user.dto.OrderResponse;
 import com.example.shop.user.dto.UpdateOrderRequest;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +37,7 @@ public class OrderService {
     private final UserRepository userRepository;
     private final CartDetailRepository cartDetailRepository;
     private final ProductRepository productRepository;
-    private final OrderAdminService orderAdminService;
+    private final AdminOrderService adminOrderService;
 
     private User getCurrentUser() {
         String email = SecurityUtil.getCurrentUserEmail();
@@ -75,7 +80,7 @@ public class OrderService {
         Order createdOrder = orderRepository.save(order);
         cartDetailRepository.deleteAllByUserId(user.getId());
       
-        orderAdminService.cachingDeliveryOrder(user.getEmail(), order.getId());
+        adminOrderService.cachingDeliveryOrder(user.getEmail(), order.getId());
 
         return new OrderResponse(order);
     }
@@ -120,8 +125,37 @@ public class OrderService {
 
             // 총 금액 재계산
             order.updateTotalPrice();
+
+            // 캐싱된 주문 수정
+            adminOrderService.updateCachingOrder(user.getEmail(), order.getId());
         }
 
         return new OrderResponse(order);
+    }
+
+    public OrderResponse getOrder(String orderNumber) {
+        // 유저 조회
+        User user = getCurrentUser();
+
+        Order order = orderRepository.findOrderAndOrderDetailByOrderNumber(orderNumber)
+                .orElseThrow(OrderNotFoundException::new);
+
+        // 주문자 본인 확인
+        if (!order.getUser().getId().equals(user.getId())) {
+            throw new UnauthorizedOrderAccessException();
+        }
+
+        return new OrderResponse(order);
+    }
+
+    public PageResponse<OrderListResponse> getOrders(int page, int size) {
+        // 유저 조회
+        User user = getCurrentUser();
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<Order> orders = orderRepository.findByUserId(user.getId(), pageable);
+        Page<OrderListResponse> orderListResponse = orders.map(OrderListResponse::new);
+
+        return new PageResponse<>(orderListResponse);
     }
 }

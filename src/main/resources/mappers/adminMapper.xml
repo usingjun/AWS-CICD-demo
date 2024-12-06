@@ -13,7 +13,28 @@
     <!-- 모든 제품 조회 -->
     <select id="selectAllProduct" resultType="ProductTO">
         select product_id, product_name, quantity, price, image, description, created_at, updated_at
-        from product
+        from products
+    </select>
+
+    <insert id="insertProduct"  parameterType="ProductCreateRequest">
+
+        insert into products(product_name,quantity,price,image,description,created_at ,updated_at) values (#{productName},#{quantity},#{price},#{image},#{description},Now(),NOW())
+
+    </insert>
+
+    <select id="selectProductByFilter" parameterType="ProductFilterRequest" resultType="ProductTO">
+        select product_id, product_name, quantity, price, image, description, created_at, updated_at
+        from products
+        where 1=1
+        <if test="minQuantity != null">
+            AND quantity >= #{minQuantity}
+        </if>
+        <if test="minPrice != null">
+            AND price >= #{minPrice}
+        </if>
+        <if test="maxPrice != null">
+            AND price &lt;=#{maxPrice}
+        </if>
     </select>
 
     <update id="updateOrderDelivery" parameterType="OrderDeliveryRequest">

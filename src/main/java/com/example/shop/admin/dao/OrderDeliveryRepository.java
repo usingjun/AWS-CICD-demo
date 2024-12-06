@@ -34,4 +34,8 @@ public class OrderDeliveryRepository {
     public void asyncDelete(String key) {
         redisTemplate.execute((RedisConnection connection) -> connection.unlink(key.getBytes(StandardCharsets.UTF_8)));
     }
+
+    public boolean existOrder(String key, OrderDeliveryRequest value) {
+        return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(key, value));
+    }
 }

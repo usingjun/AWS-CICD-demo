@@ -3,7 +3,7 @@ package com.example.shop.batch;
 import com.example.shop.admin.dao.OrderDeliveryRepository;
 import com.example.shop.admin.dto.OrderDeliveryRequest;
 import com.example.shop.admin.mapper.AdminMapper;
-import com.example.shop.admin.service.OrderAdminService;
+import com.example.shop.admin.service.AdminOrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;
@@ -16,14 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKey;
+import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKeyYesterday;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class OrderUpdateSenderWriter implements ItemWriter<OrderDeliveryRequest> {
 
-    private final OrderAdminService orderAdminService;
+    private final AdminOrderService adminOrderService;
     private final OrderDeliveryRepository orderDeliveryRepository;
     private final SqlSessionFactory sqlSessionFactory;
 
@@ -40,8 +40,8 @@ public class OrderUpdateSenderWriter implements ItemWriter<OrderDeliveryRequest>
             sqlSession.flushStatements();
 
         } finally {
-            orderDeliveryRequestList.forEach(orderAdminService::sendDeliveryAlertEmail);
-            orderDeliveryRepository.removeOrderEmail(getOrderKey(), orderDeliveryRequestList.toArray());
+            orderDeliveryRequestList.forEach(adminOrderService::sendDeliveryAlertEmail);
+            orderDeliveryRepository.removeOrderEmail(getOrderKeyYesterday(), orderDeliveryRequestList.toArray());
         }
     }
 }

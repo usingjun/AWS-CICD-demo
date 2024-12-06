@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Component;
 
-import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKey;
+import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKeyYesterday;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +20,7 @@ public class DeliveryOrderReader implements ItemStreamReader<OrderDeliveryReques
 
     @Override
     public void open(ExecutionContext executionContext) {
-        cursor = redisTemplate.opsForSet().scan(getOrderKey(), ScanOptions.NONE);
+        cursor = redisTemplate.opsForSet().scan(getOrderKeyYesterday(), ScanOptions.NONE);
     }
 
     @Override
