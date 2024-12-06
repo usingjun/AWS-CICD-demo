@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html land="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배송 완료 알림</title>
+</head>
+<body style="font-family: 'Arial', sans-serif; margin: 0; padding: 0; background-color: #f4f4f4;">
+<table role="presentation" style="width: 100%; background-color: #f4f4f4; padding: 20px;">
+    <tr>
+        <td style="text-align: center; padding: 10px;">
+            <h1 style="color: #2c3e50;">배송이 시작되었습니다!</h1>
+            <p style="font-size: 16px; color: #34495e;">고객님의 주문이 배송 시작되었습니다. 감사합니다!</p>
+        </td>
+    </tr>
+    <tr>
+        <td style="background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+            <h2 style="color: #2980b9;">주문 정보</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd; color: #7f8c8d;">주문 번호</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd; color: #34495e;" th:text="${orderId}"></td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd; color: #7f8c8d;">배송 일자</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd; color: #34495e;" th:text="${deliveryDate}"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center; padding: 20px;">
+            <p style="font-size: 14px; color: #95a5a6;">문의 사항이 있으시면 고객센터로 연락주시기 바랍니다.</p>
+            <p style="font-size: 14px; color: #95a5a6;">감사합니다!</p>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

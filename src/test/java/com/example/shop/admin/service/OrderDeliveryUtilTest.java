@@ -4,21 +4,23 @@ import com.example.shop.admin.dto.OrderDeliveryRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import static com.example.shop.admin.service.OrderDeliveryUtil.orderDeliveryTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderDeliveryUtilTest {
 
-    @DisplayName("UnknownFormatConversionException: Conversion = ';' 오류 해결")
+    @DisplayName("Thymeleaf를 이용해 html 파일을 String으로 변환")
     @Test
     void orderDeliveryTemplateTest() {
         // given
         OrderDeliveryRequest order = new OrderDeliveryRequest("aaaaaaa@aaaa.com", 13L);
+        String orderDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
 
         // when & then
-        assertThat(order.getEmail()).isEqualTo("aaaaaaa@aaaa.com");
-        assertThat(order.getOrderId()).isEqualTo(13L);
         assertThat(orderDeliveryTemplate(order))
-                .contains(order.getOrderId().toString());
+                .contains(order.getOrderId().toString(), orderDate);
     }
 }
