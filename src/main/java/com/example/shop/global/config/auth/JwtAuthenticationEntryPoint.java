@@ -29,16 +29,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json; charset=UTF-8");
 
         if(exception!=null) {
-            if (exception.equals(EXPIRED)) {
-                setResponse(response, HttpStatus.UNAUTHORIZED.value(),"만료된 토큰입니다");
-            } if (exception.equals(MALFORMED)) {
-                setResponse(response,HttpStatus.BAD_REQUEST.value(), "잘못된 형식의 토큰입니다");
-            } if(exception.equals(HEADER)) {
-                setResponse(response,HttpStatus.BAD_REQUEST.value(), "Authorization 헤더가 존재하지 않습니다.");
-            } if(exception.equals(LOGOUT)) {
-                setResponse(response, HttpStatus.BAD_REQUEST.value(), "로그아웃 처리된 토큰입니다.");
-            } if(exception.equals(BEARER)) {
-                setResponse(response, HttpStatus.BAD_REQUEST.value(), "Bearer 형식이 잘못됐습니다.");
+            switch (exception) {
+                case EXPIRED -> setResponse(response, HttpStatus.UNAUTHORIZED.value(), "만료된 토큰입니다");
+                case MALFORMED -> setResponse(response, HttpStatus.BAD_REQUEST.value(), "잘못된 형식의 토큰입니다");
+                case HEADER -> setResponse(response, HttpStatus.BAD_REQUEST.value(), "Authorization 헤더가 존재하지 않습니다.");
+                case LOGOUT -> setResponse(response, HttpStatus.BAD_REQUEST.value(), "로그아웃 처리된 토큰입니다.");
+                case BEARER -> setResponse(response, HttpStatus.BAD_REQUEST.value(), "Bearer 형식이 잘못됐습니다.");
             }
         }
     }

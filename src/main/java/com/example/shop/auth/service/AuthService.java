@@ -1,5 +1,6 @@
 package com.example.shop.auth.service;
 
+import com.example.shop.auth.repository.BlackListRepository;
 import com.example.shop.auth.repository.EmailCodeRepository;
 import com.example.shop.auth.repository.RefreshTokenRepository;
 import com.example.shop.auth.dto.*;
@@ -38,6 +39,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final EmailCodeRepository emailCodeRepository;
     private final EmailSender emailSender;
+    private final BlackListRepository blackListRepository;
 
 
     public AccessTokenResponse signIn(SignInRequest signInRequest) {
@@ -63,6 +65,12 @@ public class AuthService {
         validateAndDeleteUserDependencies(userId);
         userRepository.deleteById(userId);
         refreshTokenRepository.deleteById(userId);
+    }
+
+    public void logOut(String bearerToken) {
+        String accessToken = bearerToken.substring(7);
+        blackListRepository.save(accessToken, jwtProvider.getExpiration(accessToken));
+        refreshTokenRepository.deleteById(getCurrentUser().getId());
     }
 
     private void validateAndDeleteUserDependencies(Long userId) {
