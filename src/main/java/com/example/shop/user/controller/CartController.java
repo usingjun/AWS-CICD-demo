@@ -2,6 +2,7 @@ package com.example.shop.user.controller;
 
 import com.example.shop.user.dto.AddCartProductRequest;
 import com.example.shop.user.dto.CartDetailResponse;
+import com.example.shop.user.dto.CartResponse;
 import com.example.shop.user.dto.UpdateCartQuantityRequest;
 import com.example.shop.user.service.CartService;
 import jakarta.validation.Valid;
@@ -25,9 +26,8 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CartDetailResponse>> getCartDetails() {
-        List<CartDetailResponse> cartDetails = cartService.getCartDetails();
-        return ResponseEntity.ok(cartDetails);
+    public ResponseEntity<CartResponse> getCartDetails() {
+        return ResponseEntity.ok(new CartResponse(cartService.getCartDetails()));
     }
 
     @DeleteMapping("/{productId}")
