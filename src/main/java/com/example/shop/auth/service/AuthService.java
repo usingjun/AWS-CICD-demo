@@ -3,14 +3,17 @@ package com.example.shop.auth.service;
 import com.example.shop.auth.repository.EmailCodeRepository;
 import com.example.shop.auth.repository.RefreshTokenRepository;
 import com.example.shop.auth.dto.*;
+import com.example.shop.domain.cart.CartDetailRepository;
+import com.example.shop.domain.order.OrderRepository;
+import com.example.shop.domain.order.OrderStatus;
 import com.example.shop.domain.user.RefreshToken;
 import com.example.shop.domain.user.Role;
+import com.example.shop.domain.user.User;
 import com.example.shop.domain.user.UserRepository;
+import com.example.shop.global.exception.*;
 import com.example.shop.global.util.EmailSender;
 import com.example.shop.global.config.auth.JwtProvider;
-import com.example.shop.global.exception.DuplicatedEmailException;
-import com.example.shop.global.exception.RefreshTokenExpiredException;
-import com.example.shop.global.exception.UserNotFoundException;
+import com.example.shop.global.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,6 +33,8 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserRepository userRepository;
+    private final CartDetailRepository cartDetailRepository;
+    private final OrderRepository orderRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailCodeRepository emailCodeRepository;
     private final EmailSender emailSender;
@@ -49,6 +54,21 @@ public class AuthService {
         userRepository.save(SignUpRequest.toEntity(signUpRequest.getEmail()
                 , passwordEncoder.encode(signUpRequest.getPassword()), signUpRequest.getName(),role));
         return new SignUpResponse(signUpRequest.getEmail(), signUpRequest.getName());
+    }
+
+    @Transactional
+    public void deleteUser(SignInRequest signInRequest) {
+        Long userId = validateSignInInfos(signInRequest.getEmail(), signInRequest.getPassword());
+
+        validateAndDeleteUserDependencies(userId);
+        userRepository.deleteById(userId);
+        refreshTokenRepository.deleteById(userId);
+    }
+
+    private void validateAndDeleteUserDependencies(Long userId) {
+        cartDetailRepository.deleteAllByUserId(userId);
+        if(orderRepository.existsByOrderStatus(OrderStatus.PAID)) throw new UndeliveredOrderExistsException();
+        orderRepository.deleteByUserId(userId);
     }
 
 
@@ -108,8 +128,18 @@ public class AuthService {
                 .orElseThrow(UserNotFoundException::new)
                 .getId();
     }
+    public User getCurrentUser() {
+        return userRepository.findByEmail(SecurityUtil.getCurrentUserEmail())
+                .orElseThrow(UserNotFoundException::new);
+    }
     private void validateRefreshToken(Long memberId) {
         refreshTokenRepository.findByMemberId(memberId).orElseThrow(RefreshTokenExpiredException::new);
+    }
+
+    private Long validateSignInInfos(String email, String password) {
+        User user = getCurrentUser();
+        if(user.getEmail().equals(email) && passwordEncoder.matches(password,user.getPassword())) return user.getId();
+        else throw new LogInNotMatchException();
     }
 
 

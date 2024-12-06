@@ -67,4 +67,10 @@ public class AuthController {
         return ResponseEntity.ok(authService.reissue(accessToken));
     }
 
+    @Operation(summary = "회원탈퇴")
+    @DeleteMapping("/delete-user")
+    public ResponseEntity<Void> deleteUser(@RequestBody SignInRequest signInRequest) {
+        authService.deleteUser(signInRequest);
+        return ResponseEntity.ok().build();
+    }
 }
