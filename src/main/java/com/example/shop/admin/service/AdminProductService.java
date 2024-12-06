@@ -5,8 +5,10 @@ import com.example.shop.admin.dto.ProductCreateRequest;
 import com.example.shop.admin.dto.ProductFilterRequest;
 import com.example.shop.admin.dto.ProductUpdateRequest;
 import com.example.shop.admin.dto.ProductTO;
+import com.example.shop.global.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -16,27 +18,37 @@ public class AdminProductService {
 
     private final AdminDAO adminDAO;
 
-    // feature/#40-물품수정 브랜치에서 추가된 메서드
-    public String postProduct(ProductUpdateRequest productUpdateRequest) {
+    // 물품수정
+    public int postProduct(ProductUpdateRequest productUpdateRequest) {
+        if (productUpdateRequest.getProductId() == null) {
+            throw new ProductIDModifiedNotFoundException();
+        }
         int result = adminDAO.updateProduct(productUpdateRequest);
         if (result == 0) {
-            return "정상적으로 입력되지 않았습니다";
+          throw new ProductUpdateFailedException();
         }
-        return "정상적으로 입력되었습니다";
+        return result;
     }
 
-    // main 브랜치에서 추가된 메서드
+    // 전체 물품 목록 조회
     public List<ProductTO> getAllProducts() {
         return adminDAO.getAllProducts();
     }
 
 
-    public String insertProduct(ProductCreateRequest productCreateRequest) {
+    //물품 생성
+    public int insertProduct(ProductCreateRequest productCreateRequest)throws DataInsertFailedException {
+        validateProductCreateRequest(productCreateRequest);
+
+        // 데이터베이스 삽입
         int result = adminDAO.createProduct(productCreateRequest);
+
+        // 삽입 실패 처리
         if (result == 0) {
-            return "정상적으로 입력되지 않았습니다";
+
+            throw new DataInsertFailedException();
         }
-        return "정상적으로 입력되었습니다";
+        return result;
     }
 
 
@@ -45,11 +57,30 @@ public class AdminProductService {
         if (filter.getMinQuantity() == null ||
                 filter.getMinPrice() == null ||
                 filter.getMaxPrice() == null) {
-            throw new IllegalArgumentException("모든 필수값을 입력해야 합니다.");
+            throw new ProductFilterNotFoundException();
         }
 
         return adminDAO.getProductByFilter(filter); // DAO 호출
     }
+
+
+    //입력값 검증 로직
+    private void validateProductCreateRequest(ProductCreateRequest productCreateRequest) {
+        if (!StringUtils.hasText(productCreateRequest.getProductName())) {
+            throw new ProductNameNotInsertException();
+        }
+        if (productCreateRequest.getPrice() == null) {
+            throw new ProductPriceNotInsertException();
+        }
+        if (productCreateRequest.getQuantity() == null) {
+            throw new ProductQuantityNotInsertException();
+        }
+
+
+    }
+
+
+
 }
 
 

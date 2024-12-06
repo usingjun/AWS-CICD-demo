@@ -5,7 +5,7 @@
 
     <!-- 데이터 업데이트 -->
     <update id="updateProduct" parameterType="ProductUpdateRequest">
-        update product
+        update products
         set quantity=#{quantity}, price=#{price}, image=#{image}, description=#{description}, updated_at=Now()
         where product_Id=#{productId}
     </update>

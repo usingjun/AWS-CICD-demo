@@ -4,6 +4,7 @@ package com.example.shop.global.exception;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+
 @Getter
 public enum ErrorCodes {
     MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다"),
@@ -35,11 +36,26 @@ public enum ErrorCodes {
     EMAIL_FORM_CREATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 템플릿 생성 중 오류가 발생했습니다."),
     EMAIL_SEND_ERROR(HttpStatus.SERVICE_UNAVAILABLE, "Email 서버에 문제가 발생하였습니다."),
 
+
+
+    //관리자 관련 에러
+    NOT_SAVE_CREATE(HttpStatus.BAD_REQUEST, "데이터 삽입 실패: 요청 데이터가 저장되지 않았습니다."),
+    NOT_MODIFIABLE_PRODUCT(HttpStatus.NOT_FOUND,"업데이트할 상품의 정보를 찾을 수 없거나 수정할 수 없습니다." ),
+    NOT_INSERT_PRODUCT_NAME(HttpStatus.BAD_REQUEST,"상품 이름이 입력되지 않았습니다"),
+    NOT_INSERT_PRODUCT_PRICE(HttpStatus.BAD_REQUEST,"상품 갸격이 입력되지 않았습니다"),
+    NOT_INSERT_PRODUCT_QUANTITY(HttpStatus.BAD_REQUEST,"상품 수량이 입력되지 않았습니다"),
+    NOT_INSERT_PRODUCT_Filter(HttpStatus.BAD_REQUEST,"전부 입력하셔야 합니다"),
+    NOT_INSERT_PRODUCT_ID(HttpStatus.BAD_REQUEST,"ID를 입력하셔야 합니다"),
+
+
     // 메뉴 조회 관련 에러
     PRODUCTS_EMPTY(HttpStatus.NOT_FOUND, "상품이 존재하지 않습니다."),
     PRODUCTID_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 상품을 찾을 수 없습니다."),
     PRODUCTS_SEARCH_EMPTY(HttpStatus.NOT_FOUND, "조건에 맞는 상품이 없습니다."),
     PRODUCTS_SEARCH_BY_ONE_LETTER(HttpStatus.BAD_REQUEST, "상품 이름은 한 글자로 검색할 수 없습니다.");
+
+
+
 
 
     private String message;

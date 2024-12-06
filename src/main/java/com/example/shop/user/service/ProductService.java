@@ -46,7 +46,7 @@ public class ProductService {
     }
 
     public List<ProductResponse> getProductByNameOrPrice(String productName, Long price) {
-        if (productName != null && productName.length() < 2) {
+        if ((productName != null && productName != "") && productName.length() < 2) {
             throw new ProductsSearchByOneLetterException();
         }
 

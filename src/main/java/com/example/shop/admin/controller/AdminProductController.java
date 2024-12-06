@@ -5,6 +5,9 @@ import com.example.shop.admin.dto.ProductFilterRequest;
 import com.example.shop.admin.dto.ProductUpdateRequest;
 import com.example.shop.admin.dto.ProductTO;
 import com.example.shop.admin.service.AdminProductService;
+import com.example.shop.global.exception.DataInsertFailedException;
+import com.example.shop.global.exception.ProductUpdateFailedException;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +24,7 @@ public class AdminProductController {
 
     private final AdminProductService adminProductService;
 
-    // 메인 브랜치의 코드 (유지)
+    @Operation(summary = "전체 목록 조회")
     @GetMapping // 요청을 받으면 전체 리스트 출력
     public ResponseEntity<List<ProductTO>> getProducts() {
         List<ProductTO> lists = adminProductService.getAllProducts();
@@ -35,51 +38,39 @@ public class AdminProductController {
         return ResponseEntity.ok(lists);
     }
 
-    // feature/#40-물품수정 브랜치에서 추가한 코드
+    @Operation(summary = "물품 목록 수정")
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProductById(
+    public ResponseEntity<Object> updateProductById(
             @PathVariable Long id,
             @RequestBody ProductUpdateRequest productUpdateRequest) {
 
-        productUpdateRequest.setProductId(id);
-        String result = adminProductService.postProduct(productUpdateRequest);
 
-        if ("정상적으로 입력되었습니다".equals(result)) {
+            productUpdateRequest.setProductId(id);
+            int result=adminProductService.postProduct(productUpdateRequest);
             return ResponseEntity.ok(result); // 200 OK
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result); // 400 Bad Request
-        }
+
     }
+
+
+    @Operation(summary = "물품 생성")
     @PostMapping
-    public ResponseEntity<String> insertProduct(@RequestBody ProductCreateRequest product) {
-        String result = adminProductService.insertProduct(product);
+    public ResponseEntity<Object> insertProduct(@RequestBody ProductCreateRequest product) {
 
-        if ("정상적으로 입력되지 않았습니다".equals(result)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
-        }
+            int result = adminProductService.insertProduct(product);
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
+    @Operation(summary = "물품 필터링")
     @GetMapping("/filter")
     public ResponseEntity<Object> getProductsByFilter(@ModelAttribute ProductFilterRequest productFilterRequest) {
 
 
-
-        try {
             // Service 호출
             List<ProductTO> products = adminProductService.getFilteredProducts(productFilterRequest);
             return ResponseEntity.ok(products);
-        } catch (IllegalArgumentException e) {
-            // 예외 메시지를 클라이언트에 반환
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
-        }
+
 
     }
-
-
-
-
-
 
 }
