@@ -55,7 +55,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	// mybatis
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
 
 	// lombok
 	annotationProcessor 'org.projectlombok:lombok'
