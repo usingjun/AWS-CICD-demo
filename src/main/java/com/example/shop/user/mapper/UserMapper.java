@@ -1,5 +1,6 @@
 package com.example.shop.user.mapper;
 
+import com.example.shop.user.dto.ProductDetailResponse;
 import com.example.shop.user.dto.ProductResponse;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -11,6 +12,6 @@ public interface UserMapper {
     Long countProducts();
     List<ProductResponse> getAllProducts(Map<String, Object> params);
     List<ProductResponse> getAllProductsWithoutPaging();
-    ProductResponse getProductDetail(Long productId);
+    ProductDetailResponse getProductDetail(Long productId);
     List<ProductResponse> getProductByNameOrPrice(Map<String, Object> params);
 }

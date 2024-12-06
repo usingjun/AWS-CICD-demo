@@ -1,6 +1,7 @@
 package com.example.shop.user.controller;
 
 import com.example.shop.common.dto.PageResponse;
+import com.example.shop.user.dto.ProductDetailResponse;
 import com.example.shop.user.dto.ProductResponse;
 import com.example.shop.user.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +24,16 @@ public class ProductController {
     public ResponseEntity<PageResponse<ProductResponse>> getAllProducts(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+
+        if (page <= 0) { page = 1;}
+        if (size <= 0) { size = 10;}
+
         PageResponse<ProductResponse> response = productService.getAllProducts(page, size);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductResponse> getProductDetail(@PathVariable Long productId) {
+    public ResponseEntity<ProductDetailResponse> getProductDetail(@PathVariable Long productId) {
         return ResponseEntity.ok(productService.getProductDetail(productId));
     }
 

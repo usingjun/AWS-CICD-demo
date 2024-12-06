@@ -1,5 +1,6 @@
 package com.example.shop.user.dao;
 
+import com.example.shop.user.dto.ProductDetailResponse;
 import com.example.shop.user.dto.ProductResponse;
 import com.example.shop.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class UserDao {
         return new PageImpl<>(products, pageable, total);
     }
 
-    public ProductResponse getProductDetail(Long productId) {
+    public ProductDetailResponse getProductDetail(Long productId) {
         return userMapper.getProductDetail(productId);
     }
 

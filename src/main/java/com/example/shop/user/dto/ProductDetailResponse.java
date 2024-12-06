@@ -1,8 +1,6 @@
 package com.example.shop.user.dto;
 
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 

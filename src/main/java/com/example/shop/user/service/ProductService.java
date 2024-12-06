@@ -6,6 +6,7 @@ import com.example.shop.global.exception.ProductSearchEmptyException;
 import com.example.shop.global.exception.ProductsEmptyException;
 import com.example.shop.global.exception.ProductsSearchByOneLetterException;
 import com.example.shop.user.dao.UserDao;
+import com.example.shop.user.dto.ProductDetailResponse;
 import com.example.shop.user.dto.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -36,8 +37,8 @@ public class ProductService {
         return new PageResponse<>(products);
     }
 
-    public ProductResponse getProductDetail(Long productId) {
-        ProductResponse product = userDao.getProductDetail(productId);
+    public ProductDetailResponse getProductDetail(Long productId) {
+        ProductDetailResponse product = userDao.getProductDetail(productId);
         if (product == null) {
             throw new ProductIdNotFoundException();
         }
