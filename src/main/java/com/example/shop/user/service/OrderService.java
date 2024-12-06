@@ -15,8 +15,8 @@ import com.example.shop.domain.user.UserRepository;
 import com.example.shop.global.exception.*;
 import com.example.shop.global.util.SecurityUtil;
 import com.example.shop.user.dto.CreateOrderRequest;
-import com.example.shop.user.dto.OrderListResponse;
-import com.example.shop.user.dto.OrderResponse;
+import com.example.shop.common.dto.OrderListResponse;
+import com.example.shop.common.dto.OrderResponse;
 import com.example.shop.user.dto.UpdateOrderRequest;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -137,7 +137,7 @@ public class OrderService {
         // 유저 조회
         User user = getCurrentUser();
 
-        Order order = orderRepository.findOrderAndOrderDetailByOrderNumber(orderNumber)
+        Order order = orderRepository.findOrderAndOrderDetailAndProductByOrderNumber(orderNumber)
                 .orElseThrow(OrderNotFoundException::new);
 
         // 주문자 본인 확인
