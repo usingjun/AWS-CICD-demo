@@ -20,34 +20,29 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@RequestBody @Valid CreateOrderRequest request) {
-        OrderResponse response = orderService.createOrder(request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(orderService.createOrder(request));
     }
 
     @PutMapping("/{orderNumber}")
     public ResponseEntity<OrderResponse> updateOrder(@PathVariable String orderNumber, @RequestBody @Valid UpdateOrderRequest request) {
-        OrderResponse response = orderService.updateOrder(orderNumber, request);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(orderService.updateOrder(orderNumber, request));
     }
 
     @GetMapping
     public ResponseEntity<PageResponse<OrderListResponse>> getOrders(
             @RequestParam(defaultValue = "1") int page
             , @RequestParam(defaultValue = "10") int size) {
-        PageResponse<OrderListResponse> response = orderService.getOrders(page, size);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(orderService.getOrders(page, size));
     }
 
     @GetMapping("/{orderNumber}")
     public ResponseEntity<OrderResponse> getOrder(@PathVariable String orderNumber) {
-        OrderResponse orderResponse = orderService.getOrder(orderNumber);
-        return ResponseEntity.ok(orderResponse);
+        return ResponseEntity.ok(orderService.getOrder(orderNumber));
     }
 
     @PostMapping("/{orderNumber}/cancel")
     public ResponseEntity<OrderResponse> cancelOrder(@PathVariable String orderNumber) {
-        OrderResponse response = orderService.cancelOrder(orderNumber);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(orderService.cancelOrder(orderNumber));
     }
 
 }
