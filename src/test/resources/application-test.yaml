@@ -40,6 +40,7 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
+      schema: classpath:org/springframework/batch/core/schema-h2.sql
 
   web:
     resources:
