@@ -63,8 +63,8 @@ public class AuthController {
 
     @Operation(summary = "액세스 토큰 재발급")
     @PostMapping("/reissue")
-    public ResponseEntity<AccessTokenResponse> reissue(@RequestBody String accessToken) {
-        return ResponseEntity.ok(authService.reissue(accessToken));
+    public ResponseEntity<AccessTokenResponse> reissue(@RequestBody ReIssueTokenRequest reIssueTokenRequest) {
+        return ResponseEntity.ok(authService.reissue(reIssueTokenRequest));
     }
 
     @Operation(summary = "회원탈퇴")
