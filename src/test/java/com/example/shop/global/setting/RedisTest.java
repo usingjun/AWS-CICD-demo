@@ -1,4 +1,4 @@
-package com.example.shop.global.annotation;
+package com.example.shop.global.setting;
 
 import com.example.shop.global.config.RedisTestConfig;
 import com.example.shop.global.config.RedisTestContainer;

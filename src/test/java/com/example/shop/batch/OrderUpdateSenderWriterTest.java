@@ -7,7 +7,7 @@ import com.example.shop.admin.service.AdminOrderService;
 import com.example.shop.domain.order.Order;
 import com.example.shop.domain.order.OrderRepository;
 import com.example.shop.domain.order.OrderStatus;
-import com.example.shop.global.annotation.ServiceTest;
+import com.example.shop.global.setting.ServiceTest;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

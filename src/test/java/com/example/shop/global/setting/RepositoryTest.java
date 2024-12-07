@@ -1,4 +1,4 @@
-package com.example.shop.global.annotation;
+package com.example.shop.global.setting;
 
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

@@ -1,7 +1,7 @@
 package com.example.shop.admin.dao;
 
 import com.example.shop.admin.dto.OrderDeliveryRequest;
-import com.example.shop.global.annotation.RedisTest;
+import com.example.shop.global.setting.RedisTest;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

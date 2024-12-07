@@ -1,4 +1,4 @@
-package com.example.shop.global.annotation;
+package com.example.shop.global.setting;
 
 import com.example.shop.admin.controller.AdminOrderController;
 import com.example.shop.admin.controller.AdminProductController;
