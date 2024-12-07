@@ -107,7 +107,8 @@ public class AuthService {
                 .orElse(Boolean.FALSE);  // 값이 없거나 인증 코드가 다르면 false 반환
     }
 
-    public AccessTokenResponse reissue(String accessToken) {
+    public AccessTokenResponse reissue(ReIssueTokenRequest tokenRequest) {
+        String accessToken = tokenRequest.getAccessToken();
         Long memberId = getMemberIdByAccessToken(accessToken);
 
         validateRefreshToken(memberId); // 리프레시 토큰 존재여부 확인
