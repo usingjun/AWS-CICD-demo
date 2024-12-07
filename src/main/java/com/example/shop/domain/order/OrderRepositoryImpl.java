@@ -36,11 +36,11 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         }
 
         // 결제 금액 범위 검색
-        if (request.getMinAmount() != null) {
-            builder.and(order.totalPrice.goe(request.getMinAmount()));
+        if (request.getMinPrice() != null) {
+            builder.and(order.totalPrice.goe(request.getMinPrice()));
         }
-        if (request.getMaxAmount() != null) {
-            builder.and(order.totalPrice.loe(request.getMaxAmount()));
+        if (request.getMaxPrice() != null) {
+            builder.and(order.totalPrice.loe(request.getMaxPrice()));
         }
 
         // 주문 일자 검색
