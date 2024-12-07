@@ -1,6 +1,7 @@
 package com.example.shop.global.config.auth;
 
-import com.example.shop.auth.repository.RefreshTokenRepository;
+import com.example.shop.auth.repository.BlackListRepository;
+import com.example.shop.global.exception.LogOutTokenException;
 import com.example.shop.global.exception.NoAuthorizationHeaderException;
 import com.example.shop.global.exception.NoBearerException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final BlackListRepository blackListRepository;
     private final static String EXCEPTION = "exception";
     private final static String LOGOUT = "logout";
     private final static String MALFORMED = "malformed";
@@ -33,6 +34,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String token = resolveToken(request);
+
+            if(blackListRepository.findByToken(token).isPresent()) {
+                throw new LogOutTokenException();
+            }
             if (jwtProvider.validateToken(token)) {
                 Authentication authentication = jwtProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -45,6 +50,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             request.setAttribute(EXCEPTION, HEADER);
         } catch (NoBearerException e) {
             request.setAttribute(EXCEPTION,BEARER);
+        } catch (LogOutTokenException e) {
+            request.setAttribute(EXCEPTION,LOGOUT);
         } finally {
             filterChain.doFilter(request, response);
         }

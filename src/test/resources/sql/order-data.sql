@@ -1,7 +1,7 @@
 -- User 테이블에 데이터 삽입
-INSERT INTO users (email, password, user_role, user_name, created_at, updated_at)
+INSERT INTO users (email, password, user_role, user_name, user_status, created_at, updated_at)
 VALUES
-    ('test@test.com', 'test', 'ROLE_USER', 'tester', now(), now());
+    ('test@test.com', 'test', 'ROLE_USER', 'tester', 'ACTIVE', now(), now());
 
 -- Order 테이블에 데이터 삽입
 INSERT INTO orders (

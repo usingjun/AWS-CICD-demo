@@ -13,6 +13,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, OrderReposi
 
     Optional<Order> findByOrderNumber(String orderNumber);
 
+    @Query("SELECT o FROM Order o WHERE o.user.id = :userId ORDER BY o.updatedAt DESC, o.createdAt DESC")
     Page<Order> findByUserId(Long userId, Pageable pageable);
 
     @Query("select o from Order o" +
@@ -32,4 +33,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, OrderReposi
             " join fetch o.orderDetails od" +
             " where o.orderNumber = :orderNumber")
     Optional<Order> findOrderAndOrderDetailByOrderNumber(String orderNumber);
+
+    boolean existsByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus);
+    void deleteByUserId(Long userId);
 }

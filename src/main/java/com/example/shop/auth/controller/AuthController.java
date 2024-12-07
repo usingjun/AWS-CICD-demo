@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name="Auth")
-@RestController()
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/auth")
 public class AuthController {
@@ -63,8 +63,21 @@ public class AuthController {
 
     @Operation(summary = "액세스 토큰 재발급")
     @PostMapping("/reissue")
-    public ResponseEntity<AccessTokenResponse> reissue(@RequestBody String accessToken) {
-        return ResponseEntity.ok(authService.reissue(accessToken));
+    public ResponseEntity<AccessTokenResponse> reissue(@RequestBody ReIssueTokenRequest reIssueTokenRequest) {
+        return ResponseEntity.ok(authService.reissue(reIssueTokenRequest));
     }
 
+    @Operation(summary = "회원탈퇴")
+    @DeleteMapping("/delete-user")
+    public ResponseEntity<Void> deleteUser(@RequestBody SignInRequest signInRequest) {
+        authService.deleteUser(signInRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "로그아웃")
+    @PostMapping("/log-out")
+    public ResponseEntity<Void> logOut(@RequestHeader("Authorization") String accessToken) {
+        authService.logOut(accessToken);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name="Admin Order")
+@Tag(name="Admin-Order")
 @RestController
 @RequestMapping("/api/admin/orders")
 @RequiredArgsConstructor
@@ -28,18 +28,18 @@ public class AdminOrderController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "관리자 주문 상세 조회")
     @GetMapping("/{orderNumber}")
     public ResponseEntity<AdminOrderResponse> getOrder(@PathVariable String orderNumber) {
-        AdminOrderResponse response = adminOrderService.getOrder(orderNumber);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(adminOrderService.getOrder(orderNumber));
     }
 
+    @Operation(summary = "관리자 주문 목록 조회")
     @GetMapping
     public ResponseEntity<PageResponse<AdminOrderListResponse>> getOrders(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @ModelAttribute OrderSearchRequest request) {
-        PageResponse<AdminOrderListResponse> response = adminOrderService.searchOrders(request, page, size);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(adminOrderService.searchOrders(request, page, size));
     }
 }

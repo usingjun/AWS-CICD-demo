@@ -26,6 +26,6 @@ public class OrderSearchRequest {
 
     private String orderName;      // 주문자
     private String receiverName;   // 수령자
-    private BigDecimal minAmount;     // 최소 결제금액
-    private BigDecimal maxAmount;     // 최대 결제금액
+    private BigDecimal minPrice;     // 최소 결제금액
+    private BigDecimal maxPrice;     // 최대 결제금액
 }

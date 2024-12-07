@@ -36,6 +36,11 @@ public class User extends BaseEntity {
     @Column(name="user_role")
     private Role userRole;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name="user_status")
+    private UserStatus userStatus;
+
     @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<CartDetail> cartDetails = new ArrayList<>();
@@ -43,4 +48,6 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     @Builder.Default
     private List<Order> orders = new ArrayList<>();
+
+    public void deactivateUser() { this.userStatus = UserStatus.DEACTIVATED;}
 }
