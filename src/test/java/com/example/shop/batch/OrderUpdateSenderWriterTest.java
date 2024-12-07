@@ -7,7 +7,6 @@ import com.example.shop.admin.service.AdminOrderService;
 import com.example.shop.domain.order.Order;
 import com.example.shop.domain.order.OrderRepository;
 import com.example.shop.domain.order.OrderStatus;
-import com.example.shop.domain.user.UserRepository;
 import com.example.shop.global.annotation.ServiceTest;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -41,8 +40,6 @@ class OrderUpdateSenderWriterTest extends ServiceTest {
     private SqlSessionFactory sqlSessionFactory;
     @Autowired
     private OrderRepository orderRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     @BeforeEach
     void setup() {
