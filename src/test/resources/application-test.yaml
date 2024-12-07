@@ -5,7 +5,6 @@ spring:
     username: sa
     password:
 
-
   jpa:
     show-sql: true
     hibernate:
@@ -15,6 +14,7 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
+    database: h2
 
   mail:
     host: 127.0.0.1
@@ -40,7 +40,6 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
-      schema: classpath:org/springframework/batch/core/schema-h2.sql
 
   web:
     resources:
