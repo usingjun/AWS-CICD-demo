@@ -1,6 +1,7 @@
 package com.example.shop.admin.dao;
 
 import com.example.shop.admin.dto.OrderDeliveryRequest;
+import com.example.shop.global.annotation.RedisTest;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +15,9 @@ import java.util.Set;
 import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKeyYesterday;
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 @SpringBootTest
-class OrderDeliveryRepositoryTest {
+class OrderDeliveryRepositoryTest extends RedisTest {
 
     @Autowired
     private OrderDeliveryRepository orderDeliveryRepository;
