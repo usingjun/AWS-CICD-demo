@@ -1,0 +1,68 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem/shop;MODE=MYSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    database: h2
+
+  mail:
+    host: 127.0.0.1
+    port: 3025
+    username: testMail
+    password: testMail
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+      transport:
+        protocol: smtp
+      debug: true
+      default-encoding: UTF-8
+
+  data:
+    redis:
+      port: 6379
+      host: localhost
+
+  batch:
+    jdbc:
+      initialize-schema: always
+
+  web:
+    resources:
+      static-locations: file:///C:/ProductImage/ # 이미지 저장 경로 설정
+
+server:
+  shutdown: graceful
+
+jwt:
+  secret: dgedgbdafmjgbaasfgadbsgmadfhgbfamfdsbvmssdgsdfgdf
+
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.example.shop.user.dto, com.example.shop.admin.dto
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    root: INFO
+    org.mybatis: DEBUG
+    org.apache.ibatis: DEBUG
+    org.mybatis.spring.SqlSessionFactoryBean: DEBUG
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: DEBUG

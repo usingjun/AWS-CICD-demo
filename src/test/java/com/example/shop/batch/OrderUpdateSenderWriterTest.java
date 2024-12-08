@@ -7,9 +7,7 @@ import com.example.shop.admin.service.AdminOrderService;
 import com.example.shop.domain.order.Order;
 import com.example.shop.domain.order.OrderRepository;
 import com.example.shop.domain.order.OrderStatus;
-import com.example.shop.domain.user.Role;
-import com.example.shop.domain.user.User;
-import com.example.shop.domain.user.UserRepository;
+import com.example.shop.global.setting.ServiceTest;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -17,20 +15,24 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.shop.batch.util.OrderDeliveryBatchUtil.getOrderKeyYesterday;
+import static org.mockito.Mockito.doNothing;
 
-@Transactional
-@SpringBootTest
-class OrderUpdateSenderWriterTest {
 
-    @Autowired
+@ExtendWith(MockitoExtension.class)
+@Sql(scripts = "classpath:/sql/order-data.sql",
+        executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+class OrderUpdateSenderWriterTest extends ServiceTest {
+
+    @MockBean
     private AdminOrderService adminOrderService;
     @Autowired
     private OrderDeliveryRepository orderDeliveryRepository;
@@ -38,24 +40,12 @@ class OrderUpdateSenderWriterTest {
     private SqlSessionFactory sqlSessionFactory;
     @Autowired
     private OrderRepository orderRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     @BeforeEach
     void setup() {
-        User user = User.builder()
-                .email("test@test.com")
-                .password("test")
-                .userRole(Role.ROLE_USER)
-                .orders(new ArrayList<>())
-                .userName("tester")
-                .build();
-
-        user = userRepository.save(user);
-
-        for (long i = 1; i <= 532; i++) {
+        for (long i = 1; i <= 5; i++) {
             orderDeliveryRepository.addOrderEmail(getOrderKeyYesterday(),
-                    new OrderDeliveryRequest(user.getEmail(), i+"test"));
+                    new OrderDeliveryRequest("test@test.com", i+"test"));
         }
     }
 
@@ -70,7 +60,7 @@ class OrderUpdateSenderWriterTest {
             sqlSession.flushStatements();
 
         } finally {
-            orderDeliveryRequestList.forEach(adminOrderService::sendDeliveryAlertEmail);
+            orderDeliveryRequestList.forEach(doNothing().when(adminOrderService)::sendDeliveryAlertEmail);
             orderDeliveryRepository.removeOrderEmail(getOrderKeyYesterday(), orderDeliveryRequestList.toArray());
         }
 
