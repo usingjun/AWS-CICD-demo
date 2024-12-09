@@ -36,4 +36,6 @@ public interface OrderRepository extends JpaRepository<Order, Long>, OrderReposi
 
     boolean existsByUserIdAndOrderStatus(Long userId, OrderStatus orderStatus);
     void deleteByUserId(Long userId);
+
+    long countByOrderStatus(OrderStatus orderStatus);
 }
