@@ -32,6 +32,9 @@ spring:
   batch:
     jdbc:
       initialize-schema: always
+    job:
+      enabled: false
+
   web:
     resources:
       static-locations: file:///C:/ProductImage/ # 이미지 저장 경로 설정
