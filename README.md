@@ -1,4 +1,4 @@
-![슬라이드17](https://github.com/user-attachments/assets/1a0caff0-b4f7-43a6-b0e1-f2d60010157d)![역할 소개](https://github.com/user-attachments/assets/30b361ca-6441-4bd5-bced-e49c925b11f8)
+![역할 소개](https://github.com/user-attachments/assets/30b361ca-6441-4bd5-bced-e49c925b11f8)
 
 ![서비스 플로우 차트](https://github.com/user-attachments/assets/f186d373-7d48-493b-9ae1-4bffd2527c65)
 
