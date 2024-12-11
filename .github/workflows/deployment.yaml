@@ -39,7 +39,7 @@ jobs:
         run: ./gradlew build -x test
         
       - name: ECR login
-        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/j6g5s0j0
+        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
       
       - name: Container build
         run: docker build -t ${{ env.ECR_URL }} .
