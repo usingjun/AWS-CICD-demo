@@ -3,7 +3,7 @@ name: PR 시 CI 테스트 자동화
 on:
   push:
     branches:
-      - main
+      # - main
 env:
   AWS_REGION: ap-northeast-2
   ECR_URL: public.ecr.aws/j6g5s0j0/cicd-test:{{ github.sha}}
@@ -14,13 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 레포지토리 체크아웃
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GIT_TOKEN }}
-      - run: touch ./src/main/resources/security.properties
-      - run: echo "${{ secrets.SECURITY_PROP }}" > ./src/main/resources/security.properties
-
       - name: JDK 17 설치
         uses: actions/setup-java@v4
         with:
@@ -53,4 +46,11 @@ jobs:
   CD:
     name: Deploy
     runs-on: ubuntu-latest
-    run: 
+    steps:
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-action@v2
+        with:
+          cluster: cicd-test           # ECS 클러스터 이름
+          service: cicd-test          # ECS 서비스 이름
+          task-definition: first-run-task-definition:2  # 태스크 정의 이름과 revision (예: my-task:1)
+          wait-for-service-stability: false  # 서비스 안정화 대기 여부 (true/false)
