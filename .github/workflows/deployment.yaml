@@ -52,9 +52,4 @@ jobs:
     needs: CI
     steps:
       - name: Deploy to ECS
-        uses: aws-actions/amazon-ecs-deploy-action@v2
-        with:
-          cluster: cicd-test           # ECS 클러스터 이름
-          service: cicd-test          # ECS 서비스 이름
-          task-definition: first-run-task-definition:4  # 태스크 정의 이름과 revision (예: my-task:1)
-          wait-for-service-stability: false  # 서비스 안정화 대기 여부 (true/false)
+        run: aws ecs update-service   --cluster cicd-test    --service cicd-test   --task-definition first-run-task-definition:5 --force-new-deployment
