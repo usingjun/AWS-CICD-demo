@@ -39,8 +39,7 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Container build
-        run: pwd && ls -al .gradle
-        # run: docker build -t ${{ env.ECR_URL }} .
+        run: docker build -t ${{ env.ECR_URL }} .
         
       - name: Container Push
         run : docker push ${{ env.ECR_URL }}
