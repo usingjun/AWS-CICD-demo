@@ -1,11 +1,13 @@
-name: PR 시 CI 테스트 자동화
+name: CICD TO ECS
 
-on:
-  push:
-    branches:
-      # - main
+# on:
+#   push:
+#     branches:
+#       # - main
 env:
   AWS_REGION: ap-northeast-2
+  AWS_ACCESS_KEY_ID: {{ secret.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: {{ secret.AWS_SECRET_ACCESS_KEY }}
   ECR_URL: public.ecr.aws/j6g5s0j0/cicd-test:{{ github.sha}}
 
 jobs:
