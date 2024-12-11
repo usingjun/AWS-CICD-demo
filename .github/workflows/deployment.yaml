@@ -59,4 +59,4 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           
       - name: Deploy to ECS
-        run: aws ecs update-service   --cluster cicd-test    --service cicd-test   --task-definition first-run-task-definition:6 --force-new-deployment
+        run: aws ecs update-service   --cluster cicd-test    --service cicd-test   --task-definition first-run-task-definition:7 --force-new-deployment
