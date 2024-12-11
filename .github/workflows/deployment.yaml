@@ -31,10 +31,12 @@ jobs:
           java-version: '17'
           cache: 'gradle'
       
-      - name: Gradle Build
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-args: 'build'
+      - name: Gradle 명령 실행 권한 부여
+        run: chmod +x ./gradlew
+        shell: bash
+
+      - name: Gradle로 프로젝트 Build
+        run: ./gradlew build
 
       - name: Container build
         run: ls -al
