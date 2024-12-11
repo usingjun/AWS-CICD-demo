@@ -30,6 +30,9 @@ jobs:
           distribution: 'oracle'
           java-version: '17'
           cache: 'gradle'
+          
+      # - name: ECR login
+      #   run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
       
       - name: Gradle 명령 실행 권한 부여
         run: chmod +x ./gradlew
@@ -38,9 +41,6 @@ jobs:
       - name: Gradle로 프로젝트 Build
         run: ./gradlew build -x test
         
-      - name: ECR login
-        run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
-      
       - name: Container build
         run: docker build -t ${{ env.ECR_URL }} .
         
