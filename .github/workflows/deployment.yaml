@@ -6,7 +6,7 @@ on:
       - main
 env:
   AWS_REGION: ap-northeast-2
-  ECR_URL: public.ecr.aws/j6g5s0j0/cicd-test:kyh
+  ECR_URL: 534420079206.dkr.ecr.ap-northeast-2.amazonaws.com/01_cicid_test:kyh
 
 jobs:
   CI:
