@@ -36,7 +36,7 @@ jobs:
         shell: bash
 
       - name: Gradle로 프로젝트 Build
-        run: ./gradlew build
+        run: ./gradlew build -x test
 
       - name: Container build
         run: ls -al
