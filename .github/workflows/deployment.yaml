@@ -37,7 +37,8 @@ jobs:
           gradle-args: 'build'
 
       - name: Container build
-        run: docker build -t ${{ env.ECR_URL }} .
+        run: ls -al
+        # run: docker build -t ${{ env.ECR_URL }} .
         
       - name: Container Push
         run : docker push ${{ env.ECR_URL }}
