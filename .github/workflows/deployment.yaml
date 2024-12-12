@@ -31,9 +31,6 @@ jobs:
           java-version: '17'
           cache: 'gradle'
           
-      - name: ECR login
-        run: aws ecr get-login-password | docker login --username AWS --password-stdin 534420079206.dkr.ecr.ap-northeast-2.amazonaws.com
-      
       - name: Gradle 명령 실행 권한 부여
         run: chmod +x ./gradlew
         shell: bash
