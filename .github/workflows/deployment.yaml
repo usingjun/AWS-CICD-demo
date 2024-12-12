@@ -43,6 +43,7 @@ jobs:
         
       - name: Container Push
         run : docker push ${{ env.ECR_URL }}
+        
   CD:
     name: Deploy
     runs-on: ubuntu-latest
